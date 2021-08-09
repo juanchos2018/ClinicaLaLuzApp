@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="15dp"
+    android:paddingTop="15dp"
+    android:paddingEnd="15dp">
+
+    <TextView
+        android:id="@+id/nameMedic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="NAME EXAMPLE"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#C53434"/>
+    <TextView
+        android:id="@+id/nameSpecialty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="ESPECIALIDAD"
+        android:textSize="11sp"
+        android:layout_below="@+id/nameMedic"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="2dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_below="@+id/nameSpecialty"
+        android:layout_marginTop="15dp"/>
+</RelativeLayout>

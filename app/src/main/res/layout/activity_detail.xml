@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".DetailActivity">
+
+        <RelativeLayout
+            android:id="@+id/titleDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/background_login">
+            <ImageView
+                android:id="@+id/returnImaDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_black_white"/>
+            <TextView
+                android:id="@+id/detailNameMedic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/name"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_below="@+id/returnImaDetail"/>
+            <TextView
+                android:id="@+id/detailMedic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail"
+                android:textColor="@color/gris"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/detailNameMedic"/>
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/detailListview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/titleDetail"
+            android:layout_alignParentBottom="true"
+
+            android:layout_marginTop="12dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/wsp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="25dp"
+            android:src="@drawable/ic_whatsapp_white"
+            android:contentDescription="@string/reservaWsp"
+            app:backgroundTint="#54cf60">
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    </RelativeLayout>
+</layout>

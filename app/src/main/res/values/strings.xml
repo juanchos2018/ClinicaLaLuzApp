@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Clinica La Luz</string>
+    <string name="name">Name Example</string>
+    <string name="detail">Nuestro medico atiende en el siguiente horario:</string>
+    <string name="buttonConsult">CONSULTAR</string>
+    <string name="textMain">Enterate de los horarios de tu medico favorito y reservalos</string>
+    <string name="textSede">Sede :</string>
+    <string name="textEspecialidad">Especialidad : </string>
+    <string name="title">Búsqueda</string>
+    <string name="separator">-</string>
+    <string name="reservaWsp">Reservar Cita</string>
+    <string name="buttonWsp">Reserva una cita</string>
+    <string name="textWsp">RESERVA TU CITA</string>
+    <string name="noMedic">¡Ups! Aún no contamos con Medicos Especialistas disponibles</string>
+    <string name="selectSpecialty">Seleccione una Especialidad</string>
+    <string name="questionLogin">¿Deseas registrar tu nivel de presion o nivel de azucar?</string>
+    <string name="buttonLogin">INGRESAR</string>
+    <string name="buttonRegister">REGISTRATE</string>
+    <string name="docR">Doc. Identidad</string>
+    <string name="titleRegister">Registro</string>
+    <string name="regPassword">Contraseña</string>
+    <string name="textConfirm">CONFIRMAR</string>
+    <string name="regDate">Fec. Nacimiento</string>
+    <string name="regPhone">Celular</string>
+    <string name="regEmail">Email</string>
+    <string name="regLastname">Apellidos</string>
+    <string name="regName">Nombres</string>
+    <string name="buttonRegCancel">CANCELAR</string>
+    <string name="buttonRegCreate">CREAR CUENTA</string>
+    <string name="buttonHeart">CONTROL DE PRESION</string>
+    <string name="buttonSugar">CONTROL DE AZUCAR</string>
+    <string name="preTitleNew">Nuevo</string>
+    <string name="textPreDate">FECHA</string>
+    <string name="textGluNew">NIVEL DE AZUCAR (mg/dL.)</string>
+    <string name="savePresion">GUARDAR</string>
+    <string name="gluTitleNew">Nuevo</string>
+    <string name="saveGlucosa">GUARDAR</string>
+    <string name="textGluDate">FECHA</string>
+    <string name="hintLoginUser">Documento de Identidad</string>
+    <string name="hintLoginPass">Contraseña</string>
+    <string name="textLogin">Inicia Sesión</string>
+    <string name="textPulso">Pulso</string>
+    <string name="textDiastólica">Diastólica</string>
+    <string name="textSistólica">Sistólica</string>
+    <string name="textSub1">(mmHg)</string>
+    <string name="textSub2">(mmHg)</string>
+    <string name="textSub3">(bpm)</string>
+
+    <string name="server_client_id">358436674331-0g6h09um7tqdhrh0942knfjk0a35pnta.apps.googleusercontent.com</string>
+
+    <string name="facebook_app_id">258055095884775</string>
+    <string name="fb_login_protocol_scheme">fb258055095884775</string>
+
+
+    <string-array name="sede">
+        <item>Tacna</item>
+    </string-array>
+</resources>
