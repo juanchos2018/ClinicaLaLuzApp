@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" >
-
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
     <data>
     </data>
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:background="@drawable/background_login"
@@ -14,7 +12,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            tools:context=".RegisterGmailActivity"
+            tools:context=".RegisterFacebookActivity"
             android:layout_height="match_parent"
             android:padding="15dp">
 
@@ -54,7 +52,7 @@
                 android:layout_below="@+id/relativeRegister"
                 android:layout_marginTop="20dp">
                 <EditText
-                    android:id="@+id/regDocIdentity"
+                    android:id="@+id/regDocIdentity2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -67,10 +65,10 @@
                     android:padding="15dp"
                     android:background="@drawable/rounded_edit_text"/>
                 <EditText
-                    android:id="@+id/regName"
+                    android:id="@+id/regName2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/regDocIdentity"
+                    android:layout_below="@+id/regDocIdentity2"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="30dp"
@@ -79,10 +77,10 @@
                     android:hint="@string/regName"
                     android:background="@drawable/rounded_edit_text"/>
                 <EditText
-                    android:id="@+id/regLastname"
+                    android:id="@+id/regLastname2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/regName"
+                    android:layout_below="@+id/regName2"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="30dp"
@@ -91,10 +89,10 @@
                     android:padding="15dp"
                     android:background="@drawable/rounded_edit_text"/>
                 <TextView
-                    android:id="@+id/regDate"
+                    android:id="@+id/regDate2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/regLastname"
+                    android:layout_below="@+id/regLastname2"
                     android:clickable="false"
                     android:layout_alignParentStart="true"
                     android:hint="@string/regDate"
@@ -105,10 +103,10 @@
                     android:padding="15dp"
                     android:background="@drawable/rounded_edit_text"/>
                 <EditText
-                    android:id="@+id/regPhone"
+                    android:id="@+id/regPhone2"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/regLastname"
+                    android:layout_below="@+id/regLastname2"
                     android:maxLength="9"
                     android:layout_alignParentEnd="true"
                     android:hint="@string/regPhone"
@@ -120,10 +118,10 @@
                     android:background="@drawable/rounded_edit_text"/>
 
                 <EditText
-                    android:id="@+id/regEmail"
+                    android:id="@+id/regEmail2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/regDate"
+                    android:layout_below="@+id/regDate2"
                     android:inputType="textEmailAddress"
                     android:hint="@string/regEmail"
                     android:layout_marginStart="30dp"
@@ -131,15 +129,14 @@
                     android:layout_marginEnd="30dp"
                     android:textColor="@color/black"
                     android:padding="15dp"
-                    android:enabled="false"
                     android:background="@drawable/rounded_edit_text"/>
 
                 <Button
-                    android:id="@+id/buttonRegCreate"
+                    android:id="@+id/buttonRegCreate2"
                     android:layout_width="170dp"
                     android:layout_height="50dp"
                     android:background="@drawable/button_red"
-                    android:layout_below="@+id/regEmail"
+                    android:layout_below="@+id/regEmail2"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="30dp"
                     android:layout_marginStart="180dp"
@@ -151,9 +148,7 @@
                     android:textSize="15sp"/>
 
             </RelativeLayout>
-
         </RelativeLayout>
-
     </ScrollView>
 
 </layout>

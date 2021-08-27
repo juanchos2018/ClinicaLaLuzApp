@@ -90,7 +90,6 @@ class SearchActivity : AppCompatActivity() {
     private fun filtrar(texto: Editable) {
         val filtradatos: ArrayList<Medic> = ArrayList()
         for (item in list) {
-
             //   if (item.getNombrepaciente().toLowerCase().contains(texto)){
             if (item.nameMedic.toLowerCase().contains(texto)) {
                 filtradatos.add(item)

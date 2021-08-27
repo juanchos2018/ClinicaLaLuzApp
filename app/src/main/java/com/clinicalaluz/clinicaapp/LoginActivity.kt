@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,9 +23,8 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.clinicalaluz.clinicaapp.databinding.ActivityLoginBinding
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
+import com.facebook.AccessToken
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -40,7 +40,6 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
 
-
     private  lateinit var mCallbackManager :CallbackManager
     val RC_SIGN_IN =0
 
@@ -53,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
 
         binding.buttonRegister.setOnClickListener {
@@ -83,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
                     Request.Method.GET, url,null,
                     { response: JSONObject ->
                         val json = response.optJSONArray("usuario")
-                      //  Log.e("respsonse ", json.toString())
+                        Log.e("respsonse ", json.toString())
                         progres.dismiss()
                         var jsonObject: JSONObject? = null
                         try {
@@ -93,11 +91,15 @@ class LoginActivity : AppCompatActivity() {
 
                             if (existe.equals("existe")){
                                 var nombres =jsonObject.optString("NOM_PACIENTE")
+                                var  apellidos =jsonObject.optString("APE_PATERNO")
                                 var  id=jsonObject.optString("COD_PACIENTE")
                                 var  estado =jsonObject.optString("ESTADO")
                                 var  correo =jsonObject.optString("CORREO")
                             //    if (estado.equals("1")){
+                                if (logueo=="gmail"){
+                                    Toast.makeText(this, "Usted se logueo con su Gmail ", Toast.LENGTH_SHORT).show()
 
+                                }else{
                                     val preferences: SharedPreferences = this@LoginActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
                                     val editor = preferences.edit()
                                     editor.putString("id", id)
@@ -111,14 +113,15 @@ class LoginActivity : AppCompatActivity() {
                                         editor.putString("recordar", "false")
                                     }
                                     editor.putString("nombres", nombres)
+                                    editor.putString("apellidos", apellidos)
                                     editor.putString("clave", pass)
                                     editor.commit()
 
-                                    val intent = Intent(this@LoginActivity, MenuActivity::class.java)
+                                    val intent = Intent(this@LoginActivity, MenuNuevoActivity::class.java)
                                     intent.putExtra("TipoSesion","dni")
                                     startActivity(intent)
                                     Toast.makeText(this, "Bienvenido "+nombres, Toast.LENGTH_SHORT).show()
-
+                                }
                                // }else{
                               //      warning("Tu correo no esta verificado")
                                // }
@@ -126,7 +129,10 @@ class LoginActivity : AppCompatActivity() {
                             }else{
                                 if (logueo=="gmail"){
                                     Toast.makeText(this, "Usted se logueo con su Gmail ", Toast.LENGTH_SHORT).show()
-                                }else {
+                                }else if(logueo=="facebook"){
+                                    Toast.makeText(this, "Usted se logueo con su Facebook ", Toast.LENGTH_SHORT).show()
+
+                                }else{
                                     fail("No Existe Usuario")
                                 }
                             }
@@ -147,22 +153,27 @@ class LoginActivity : AppCompatActivity() {
         binding.returnMain.setOnClickListener {
             finish()
         }
+
+
         //Gmail login
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
             .build()
-
         mGoogleSignInClient= GoogleSignIn.getClient(this, gso)
 
-        var   acct1 = GoogleSignIn.getLastSignedInAccount(this)
+        var acct1 = GoogleSignIn.getLastSignedInAccount(this)
         if (acct1 != null) {
-            val intent = Intent(this, MenuActivity::class.java)
+            val intent = Intent(this, MenuNuevoActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra("TipoSesion","gmail")
             startActivity(intent)
+        }
+        else if(AccessToken.getCurrentAccessToken() != null){
+            goMainScreen2()
+        }
+        else {
 
-        }else {
             val preferences = getSharedPreferences("datosuser", MODE_PRIVATE)
             var dniuser = preferences.getString("dni", null)
             var logueo = preferences.getString("logueo", null)
@@ -175,14 +186,14 @@ class LoginActivity : AppCompatActivity() {
                     binding.idcheckorecordar.isChecked=true
                 }
                 if (logueo=="dni"){
-                    val intent = Intent(this, MenuActivity::class.java)
+                    val intent = Intent(this, MenuNuevoActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("TipoSesion","dni")
                     startActivity(intent)
                 }
+            }else{
+               // Toast.makeText(this, "Datos vacios (DNI) ", Toast.LENGTH_SHORT).show()
             }
-
-
         }
 
         binding.signInButton.setSize(SignInButton.SIZE_STANDARD)
@@ -192,24 +203,156 @@ class LoginActivity : AppCompatActivity() {
         }
 
         //facebbok
-//        mCallbackManager = CallbackManager.Factory.create()
-//        binding.loginButton.setReadPermissions("email", "public_profile")
-//        binding.loginButton.registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
-//            override fun onSuccess(loginResult: LoginResult) {
-//                Log.d("msg", "facebook:onSuccess:$loginResult")
-//                goMainScreen();
-//            }
-//            override fun onCancel() {
-//                Log.d("ms", "facebook:onCancel")
-//            }
-//            override fun onError(error: FacebookException) {
-//                Log.d("TAG", "facebook:onError", error)
-//            }
-//        })
+        mCallbackManager = CallbackManager.Factory.create()
+        binding.loginButton.setReadPermissions("email", "public_profile")
+        binding.loginButton.registerCallback(mCallbackManager, object :
+            FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                Log.d("msg", "facebook:onSuccess:$loginResult")
+                Log.d("token", "tok :"+loginResult.accessToken)
+                Log.d("GlobalVars.TAG", "Tokenssss::" + loginResult.getAccessToken().getToken())
+                val request = GraphRequest.newMeRequest(
+                    loginResult.getAccessToken()
+                ) { `object`, response ->
+                  //  Toast.makeText(applicationContext, "res: "+response.toString(), Toast.LENGTH_LONG).show()
+                    if (response != null) {
+                        try {
+
+                            val email = `object`.getString("email")
+                            val birthday = `object`.getString("birthday")
+                            Log.d("eaml", "ema :"+email)
+                            Log.d("eaml", "ema :"+birthday)
+
+                            goMainScreen(loginResult.accessToken,email)
+
+
+                        } catch (e: JSONException) {
+                            Toast.makeText(applicationContext, "Ca :"+ e.message, Toast.LENGTH_LONG).show()
+                            Log.e("errr",e.message.toString())
+                        }
+                    }
+                }
+                val parameters = Bundle()
+                parameters.putString("fields", "email,birthday")
+                request.parameters = parameters
+                request.executeAsync()
+
+
+          //      Toast.makeText(applicationContext, "facebook:onSuccess:$loginResult", Toast.LENGTH_LONG).show()
+               // goMainScreen(loginResult.accessToken)
+        }
+            override fun onCancel() {
+                Log.d("ms", "facebook:onCancel")
+                Toast.makeText(applicationContext, "facebook:onCancel", Toast.LENGTH_LONG).show()
+
+            }
+            override fun onError(error: FacebookException) {
+                Log.d("TAG", "facebook:onError", error)
+                Toast.makeText(applicationContext, "facebook:onError "+error, Toast.LENGTH_LONG).show()
+            }
+        })
 
     }
-    private fun goMainScreen() {
-        val intent = Intent(this, MenuActivity::class.java)
+
+
+    private fun goMainScreen(token: AccessToken,email:String) {
+//        var birthday:String=""
+//        val request = GraphRequest.newMeRequest(
+//            token
+//        ) { `object`, response ->
+//            if (response != null) {
+//                try {
+//
+//                    val email = `object`.getString("email")
+//                    Toast.makeText(applicationContext, "ee: "+email, Toast.LENGTH_LONG).show()
+//
+//                    val intent = Intent(this, MenuNuevoActivity::class.java)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    intent.putExtra("TipoSesion","facebook")
+//                    intent.putExtra("emm",birthday)
+//                    startActivity(intent)
+//                } catch (e: JSONException) {
+//                    Toast.makeText(applicationContext, "Ca :"+ e.message, Toast.LENGTH_LONG).show()
+//                   Log.e("errr",e.message.toString())
+//                }
+//            }
+//        }
+//        val parameters = Bundle()
+//        parameters.putString("fields", "email")
+//        request.parameters = parameters
+//        request.executeAndWait()
+
+
+        // Toast.makeText(applicationContext, "ee: "+email, Toast.LENGTH_LONG).show()
+        val preferences: SharedPreferences = this@LoginActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+        val editor = preferences.edit()
+        editor.putString("logueo", "facebook")
+        editor.commit()
+
+        val intent = Intent(this, MenuNuevoActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("TipoSesion","facebook")
+        intent.putExtra("email",email)
+        startActivity(intent)
+
+
+//            val request = GraphRequest.newMeRequest( token) { _, response ->
+//                val jsonObject = response.jsonObject
+//                try {
+//
+//                    birthday = jsonObject.getString("email")
+//                    Toast.makeText(applicationContext, "cumple: "+birthday, Toast.LENGTH_LONG).show()
+//
+//                    val intent = Intent(this, MenuNuevoActivity::class.java)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    intent.putExtra("TipoSesion","facebook")
+//                    intent.putExtra("emm",birthday)
+//                    startActivity(intent)
+//
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                    Toast.makeText(applicationContext, "Ca :"+ e.message, Toast.LENGTH_LONG).show()
+//                    Log.e("errr",e.message.toString())
+//                }
+//            }
+//            request.executeAsync();
+
+
+
+
+
+//        val preferences: SharedPreferences = this@LoginActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+//        val editor = preferences.edit()
+//        editor.putString("logueo", "facebook")
+//        editor.commit()
+//
+//        val intent = Intent(this, MenuNuevoActivity::class.java)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//        intent.putExtra("TipoSesion","facebook")
+//        intent.putExtra("token",birthday)
+//        startActivity(intent)
+    }
+
+    private  fun obtener1(token: AccessToken){
+        val request = GraphRequest.newMeRequest(
+            token
+        ) { `object`, response ->
+            if (response != null) {
+                try {
+                    val mFbid = `object`.getString("id")
+                    val mFullname = `object`.getString("name")
+                    val email = `object`.getString("email")
+                } catch (e: JSONException) {
+                }
+            }
+        }
+        val parameters = Bundle()
+        parameters.putString("fields", "id,name,email")
+        request.parameters = parameters
+        request.executeAndWait()
+    }
+    private fun goMainScreen2() {
+        val intent = Intent(this, MenuNuevoActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("TipoSesion","facebook")
         startActivity(intent)
@@ -271,7 +414,9 @@ class LoginActivity : AppCompatActivity() {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
-
+        else{
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
 
 //        if (requestCode == RC_SIGN_IN) {
 //
@@ -287,8 +432,9 @@ class LoginActivity : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)
             val personEmail = account.email
             var progres = ProgressDialog(this)
-            progres.setMessage("Carganado...")
+            progres.setMessage("Cargando...")
             progres.show()
+
             val url = "http://161.132.198.52:8080/app_laluz/pdoSelectUser.php?CORREO=$personEmail"
             val rq = Volley.newRequestQueue(this)
             val jst = JsonObjectRequest(
@@ -312,12 +458,21 @@ class LoginActivity : AppCompatActivity() {
                             editor.putString("correo", personEmail)
                             editor.commit()
 
-                            val intent = Intent(this@LoginActivity, MenuActivity::class.java)
+                            val intent = Intent(this@LoginActivity, MenuNuevoActivity::class.java)
                             intent.putExtra("TipoSesion","gmail")
                             startActivity(intent)
 
                         }else{
-                            val intent = Intent(this@LoginActivity, MenuActivity::class.java)
+
+                            val preferences = getSharedPreferences("datosuser", MODE_PRIVATE)
+                            preferences.edit().remove("dni").commit()
+
+                            val preferences2: SharedPreferences = this@LoginActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences2.edit()
+                            editor.putString("logueo", "gmail")
+                            editor.commit()
+
+                            val intent = Intent(this@LoginActivity, MenuNuevoActivity::class.java)
                             intent.putExtra("TipoSesion","gmail")
                             startActivity(intent)
                         }

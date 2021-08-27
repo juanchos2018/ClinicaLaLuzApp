@@ -5,27 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <androidx.cardview.widget.CardView
         app:cardCornerRadius="15dp"
         android:layout_marginRight="20sp"
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:id="@+id/tvmensaje"
+                android:id="@+id/tvmensajeudpate"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="7dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>
@@ -34,34 +33,58 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:maxHeight="100dp"
+                android:layout_marginTop="5dp"
                 android:layout_gravity="center"
-                app:lottie_rawRes="@raw/check"/>
+                app:lottie_rawRes="@raw/warning"/>
 
             <TextView
+                android:textSize="16sp"
                 android:layout_gravity="center"
-                android:id="@+id/tvdecripcion"
+                android:id="@+id/tvdecripcion2"
+                android:gravity="center"
+                android:textStyle="bold"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
-                android:textSize="16sp"
-                android:gravity="center"
                 android:layout_height="wrap_content">
 
             </TextView>
 
-            <Button
-                android:id="@+id/idbtncerrardialogo"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorBackground"
-                android:background="@drawable/btn_borde1"
-                android:text="Cerrar"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:layout_width="150dp"
                 android:layout_marginBottom="30dp"
-                android:layout_height="40dp">
-            </Button>
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btncerrar"
+                    android:textColor="@color/colorBackground"
+                    android:background="@drawable/btn_borde1"
+                    android:text="Cerrar"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp">
+                </Button>
+                <Button
+                    android:id="@+id/btnactualizar"
+                    android:textColor="@color/colorBackground"
+                    android:background="@drawable/btn_borde2"
+                    android:text="Actualizar"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp">
+                </Button>
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

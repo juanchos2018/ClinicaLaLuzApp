@@ -70,16 +70,31 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
         var   dni = preferences.getString("dni", null)
+        var   TipoSE = preferences.getString("logueo", null)
 
         if (TextUtils.isEmpty(binding.gluNew.text)){
             Toast.makeText(applicationContext, "LLenar el azucar", Toast.LENGTH_LONG).show()
 
         }else{
             if (dni==null ){
+
+                if (TipoSE=="gmail"){
+                    val intent = Intent(this, RegisterGmailActivity::class.java)
+                    startActivity(intent)
+                }else if(TipoSE=="dni"){
+                    val intent = Intent(this, RegisterActivity::class.java)
+                    startActivity(intent)
+                }else if (TipoSE=="facebook"){
+                    val intent = Intent(this, RegisterFacebookActivity::class.java)
+                    startActivity(intent)
+                }
+
                 // DNI_PACIENTE=dniuser   val singleToneClass: SingleToneClass = SingleToneClass.instance
                 //                ///  singleToneClass.data=dniuser
-                val intent = Intent(this, RegisterGmailActivity::class.java)
-                startActivity(intent)
+              //  val intent = Intent(this, RegisterGmailActivity::class.java)
+              //  startActivity(intent)
+
+
             }else{
                 val azucar = (binding.gluNew.text.toString()).toInt()
                 val url = "http://161.132.198.52:8080/app_laluz/pdoInserAzucar.php?"
@@ -87,15 +102,17 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 val stringRequest = object : StringRequest(Request.Method.POST, url,
                     Response.Listener { response ->
                         try {
-                            val obj = (response)
+
                             if (response.toString().equals("Succes")){
                                 Toast.makeText(applicationContext ,"Registrado con existo" , Toast.LENGTH_SHORT).show()
                                 consultData()
+                                binding.gluNew.text.clear()
                             }
 
                         } catch (e: JSONException) {
                             Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
                             e.printStackTrace()
+
                         }
                     },
                     object : Response.ErrorListener {
@@ -107,7 +124,7 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         val params = HashMap<String, String>()
-                        params.put("doc",DniPaciente)
+                        params.put("doc",dni)
                         params.put("fecha",fechasendpost)
                         params.put("azucar",azucar.toString())
                         return params

@@ -12,23 +12,16 @@
         android:layout_height="match_parent"
         tools:context=".MenuActivity"
         android:background="@drawable/background_login">
-        <ImageView
-            android:id="@+id/returnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close_black_white"
-            android:layout_margin="20dp"/>
 
         <LinearLayout
             android:id="@+id/contenhorizontal"
             android:padding="10dp"
-            android:layout_below="@+id/returnLogin"
             android:orientation="horizontal"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
@@ -45,8 +38,8 @@
                         android:layout_height="90dp">
                     </ImageView>
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
+
             <LinearLayout
                 android:padding="10dp"
                 android:orientation="vertical"
@@ -54,16 +47,14 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvnombreuser"
-                    android:text="Nombre completop"
+                    android:text="Nombres"
                     android:textColor="#FFFF"
                     android:textSize="19sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 </TextView>
-
                     <TextView
-
-                        android:text="Correo"
+                        android:text=""
                         android:id="@+id/tvcorreo"
                         android:textColor="#FFFF"
                         android:textSize="17sp"
@@ -71,8 +62,8 @@
                         android:layout_height="wrap_content">
                     </TextView>
             </LinearLayout>
-
         </LinearLayout>
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardviewbutton"
@@ -82,7 +73,6 @@
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             app:cardElevation="25dp"
-
             android:layout_height="wrap_content">
 
             <Button
@@ -95,10 +85,18 @@
                 android:text="Cerrar Sesion"></Button>
         </androidx.cardview.widget.CardView>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gris"
+            android:layout_below="@+id/cardviewbutton"
+            android:layout_marginTop="16dp"
+            />
         <RelativeLayout
             android:layout_below="@+id/cardviewbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_centerInParent="true">
 
             <Button
@@ -129,7 +127,8 @@
                 android:id="@+id/buttonConsult"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/buttonConsult"
+                android:drawableTop="@drawable/ic_baseline_access_time_24"
+                android:text="CONSULTAR HORARIO"
                 android:layout_below="@+id/buttonSugar"
                 android:layout_margin="18dp"
                 android:layout_centerHorizontal="true"

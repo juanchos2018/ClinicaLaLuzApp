@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/background_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/contenhorizontal"
+            android:padding="10dp"
+            android:orientation="horizontal"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/imgperfil"
+                        android:src="@drawable/default_profile_image"
+                        android:maxWidth="90dp"
+                        android:maxHeight="90dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp">
+                    </ImageView>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvnombreuser"
+                    android:text="Nombres"
+                    android:textColor="#FFFF"
+                    android:textSize="19sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+                <TextView
+                    android:text=""
+                    android:id="@+id/tvcorreo"
+                    android:textColor="#FFFF"
+                    android:textSize="17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="right"
+            android:layout_marginBottom="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardviewbutton"
+                android:layout_below="@+id/contenhorizontal"
+                android:layout_alignParentEnd="true"
+                android:padding="1dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                app:cardElevation="25dp"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btncerrarsesion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:drawableLeft="@drawable/ic_logout"
+                    android:padding="10dp"
+                    android:text="Cerrar Sesion">
+
+                </Button>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <androidx.cardview.widget.CardView
+
+                        android:layout_marginLeft="20dp"
+                        app:cardCornerRadius="15dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="100dp">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:background="@color/celeste"
+
+                            android:gravity="center_horizontal|center"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:textColor="@color/white"
+                                android:text="@string/buttonHeart"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                            </TextView>
+
+                            <Button
+                                android:layout_marginLeft="10dp"
+                                android:text="INGRESAR"
+                                android:background="@drawable/button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                            </Button>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/pngdoctor"
+                android:scaleType="fitCenter"
+                android:layout_marginLeft="20dp"
+                android:layout_height="290px"
+                android:layout_width="250px"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+</LinearLayout>

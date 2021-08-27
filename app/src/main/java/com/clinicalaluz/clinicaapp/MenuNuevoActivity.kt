@@ -3,20 +3,17 @@ package com.clinicalaluz.clinicaapp
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.os.Handler
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.android.volley.Request
 import com.android.volley.Response
@@ -24,8 +21,8 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.clinicalaluz.clinicaapp.databinding.ActivityMenuBinding
+import com.clinicalaluz.clinicaapp.databinding.ActivityMenuNuevoBinding
 import com.facebook.AccessToken
-import com.facebook.GraphRequest
 import com.facebook.Profile
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -36,21 +33,23 @@ import com.squareup.picasso.Picasso
 import org.json.JSONException
 import org.json.JSONObject
 
+class MenuNuevoActivity : AppCompatActivity() {
 
-class MenuActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityMenuBinding
 
-   // @JvmField
-     var DNI_PACIENTE=""
-     var TipoSesion=""
+    private lateinit var binding: ActivityMenuNuevoBinding
+    var DNI_PACIENTE=""
+    var TipoSesion=""
     lateinit  var mGoogleSignInClient : GoogleSignInClient
     lateinit var token:String
     lateinit var  TipoSE:String
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMenuBinding.inflate(layoutInflater)
+        //setContentView(R.layout.activity_menu_nuevo)
+        binding = ActivityMenuNuevoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
         TipoSE = preferences.getString("logueo", null).toString()
@@ -58,19 +57,7 @@ class MenuActivity : AppCompatActivity() {
         token=intent.getSerializableExtra("token").toString()
 
 
-       // Toast.makeText(applicationContext, token, Toast.LENGTH_LONG).show()
-        var birthday:String=""
-//        val request = GraphRequest.newMeRequest(
-//            token
-//        ) { `object`, response ->
-//            val jsonObject = response.jsonObject
-//            try {
-//                birthday = jsonObject.getString("birthday")
-//                Toast.makeText(applicationContext, birthday, Toast.LENGTH_LONG).show()
-//            } catch (e: JSONException) {
-//                e.printStackTrace()
-//            }
-//        }
+
         if (TipoSesion == "gmail"){
             val dniuser = preferences.getString("dni", null)
             if (dniuser==null){
@@ -128,14 +115,14 @@ class MenuActivity : AppCompatActivity() {
                 if (dniuser==null){
                     val intent = Intent(this, RegisterFacebookActivity::class.java)
                     startActivity(intent)
-                   // Toast.makeText(applicationContext, "facebook nulo", Toast.LENGTH_LONG).show()
+                    // Toast.makeText(applicationContext, "facebook nulo", Toast.LENGTH_LONG).show()
                 }else{
                     DNI_PACIENTE=dniuser
                 }
 
                 val handler = Handler()
                 handler.postDelayed({
-                    var perfil =Profile.getCurrentProfile()
+                    var perfil = Profile.getCurrentProfile()
                     if (perfil != null) {
                         displayProfileInfo(perfil)
                     } else {
@@ -143,34 +130,18 @@ class MenuActivity : AppCompatActivity() {
                     }
                 }, 2000)
 
-
-//                val timer = object: CountDownTimer(10000, 1000) {
-//                    override fun onTick(millisUntilFinished: Long) {
-//                        Toast.makeText(applicationContext, "Comienza", Toast.LENGTH_LONG).show()
-//                    }
-//                    override fun onFinish() {
-//                        Toast.makeText(applicationContext, "terina", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//                timer.start()
-               // val name = perfil.name
-
-              //  binding.tvnombreuser.setText(name+"")
-               // Toast.makeText(applicationContext, "nes : "+name, Toast.LENGTH_LONG).show()
-
             }
         }
 
-//        binding.returnLogin.setOnClickListener {
-//            finish()
-//        }
+
+        //botones
         binding.btncerrarsesion.setOnClickListener {
             if (TipoSesion=="gmail"){
                 mGoogleSignInClient.signOut()
                     .addOnCompleteListener(this, OnCompleteListener<Void?> {
                         val preferences = getSharedPreferences("datosuser", MODE_PRIVATE)
                         preferences.edit().remove("dni").commit()
-                        Toast.makeText(applicationContext, "se ha salido de sesion", Toast.LENGTH_LONG).show()
+                       // Toast.makeText(applicationContext, "se ha salido de sesion", Toast.LENGTH_LONG).show()
                         val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
@@ -210,7 +181,7 @@ class MenuActivity : AppCompatActivity() {
             }else{
                 veririqueCheck(dniuserpac.toString(),actividad)
             }
-
+            //Toast.makeText(this, TipoSesion, Toast.LENGTH_SHORT).show()
         }
         binding.buttonSugar.setOnClickListener {
 
@@ -228,53 +199,19 @@ class MenuActivity : AppCompatActivity() {
                 var actividad="GlucosaActivity"
                 veririqueCheck(dniuserpac.toString(),actividad)
             }
-
+          //  Toast.makeText(this, TipoSesion, Toast.LENGTH_SHORT).show()
         }
         binding.buttonConsult.setOnClickListener {
-            val intent = Intent(this@MenuActivity, SearchActivity::class.java)
+            val intent = Intent(this@MenuNuevoActivity, SearchActivity::class.java)
             startActivity(intent)
         }
     }
-    private  fun veririqueCheck(doc:String,actividad:String){
-        val url = "http://161.132.198.52:8080/app_laluz/consultarEstado.php?doc=$doc"
-        val rq = Volley.newRequestQueue(this)
-        val jst = JsonObjectRequest(
-            Request.Method.GET, url,null,
-            { response: JSONObject ->
-                val json = response.optJSONArray("usuario")
-              //  progres.dismiss()
-                var jsonObject: JSONObject? = null
-                try {
-                    jsonObject = json.getJSONObject(0)
-                    var existe =jsonObject.optString("existe")
-                    if (existe.equals("existe")){
-                        var estado =jsonObject.optString("ESTADO")
-                        if (estado.toString().trim()=="1"){
-                            if(actividad=="PresionActivity"){
-                                val intent = Intent(this, PresionActivity::class.java)
-                                startActivity(intent)
-                            }else if(actividad=="GlucosaActivity"){
-                                val intent = Intent(this, GlucosaActivity::class.java)
-                                startActivity(intent)
-                            }
-                        }else{
-                            warning("Comuniquese con la clinica para activar su cuenta")
-                        }
-                    }else{
-                        Toast.makeText(this, "No existe su Dni", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                   // progres.dismiss()
-                }
-            },
-            object : Response.ErrorListener {
-                override fun onErrorResponse(volleyError: VolleyError) {
-                   // progres.dismiss()
-                    Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
-                }
-            })
-        rq.add(jst)
+
+
+    private fun goLoginScreen() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun displayProfileInfo(profile: Profile) {
@@ -299,30 +236,47 @@ class MenuActivity : AppCompatActivity() {
 
     }
 
-    private fun goLoginScreen() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+    private  fun veririqueCheck(doc:String,actividad:String){
+        val url = "http://161.132.198.52:8080/app_laluz/consultarEstado.php?doc=$doc"
+        val rq = Volley.newRequestQueue(this)
+        val jst = JsonObjectRequest(
+            Request.Method.GET, url,null,
+            { response: JSONObject ->
+                val json = response.optJSONArray("usuario")
+                //  progres.dismiss()
+                var jsonObject: JSONObject? = null
+                try {
+                    jsonObject = json.getJSONObject(0)
+                    var existe =jsonObject.optString("existe")
+                    if (existe.equals("existe")){
+                        var estado =jsonObject.optString("ESTADO")
+                        if (estado.toString().trim()=="1"){
+                            if(actividad=="PresionActivity"){
+                                val intent = Intent(this, PresionActivity::class.java)
+                                startActivity(intent)
+                            }else if(actividad=="GlucosaActivity"){
+                                val intent = Intent(this, GlucosaActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }else{
+                            warning("Comuniquese con la clinica para activar su cuenta")
+                        }
+                    }else{
+                        Toast.makeText(this, "No existe su Dni", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    // progres.dismiss()
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(volleyError: VolleyError) {
+                    // progres.dismiss()
+                    Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                }
+            })
+        rq.add(jst)
     }
-    private fun warning(mensaje: String){
-        val dialogBuilder = AlertDialog.Builder(this)
-        val btcerrrar: Button
-        val tvmensaje: TextView
-        val  v = LayoutInflater.from(applicationContext).inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_warning, null)
-        val animationView: LottieAnimationView = v.findViewById(com.clinicalaluz.clinicaapp.R.id.animation_viewcheck)
-        animationView.playAnimation()
-        dialogBuilder.setView(v)
-        btcerrrar = v.findViewById(com.clinicalaluz.clinicaapp.R.id.idbtncerrardialogo) as Button
-        tvmensaje = v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvmensaje)
-        tvmensaje.text = mensaje
-        val alert = dialogBuilder.create()
-        btcerrrar.setOnClickListener {
-            alert.dismiss()
-        }
-        alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        alert.show()
-    }
-
     private fun warningDatos(mensaje: String,actividad: String){
         val dialogBuilder = AlertDialog.Builder(this)
         val btcerrrar: Button
@@ -349,18 +303,28 @@ class MenuActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             alert.dismiss()
-          //  val intent = Intent(this, RegisterFacebookActivity::class.java)
-           // startActivity(intent)
+            //  val intent = Intent(this, RegisterFacebookActivity::class.java)
+            // startActivity(intent)
         }
         alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alert.show()
     }
-
-}
-
-class SingleToneClass public constructor() {
-    var data: String? = null
-    companion object {
-        val instance = SingleToneClass()
+    private fun warning(mensaje: String){
+        val dialogBuilder = AlertDialog.Builder(this)
+        val btcerrrar: Button
+        val tvmensaje: TextView
+        val  v = LayoutInflater.from(applicationContext).inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_warning, null)
+        val animationView: LottieAnimationView = v.findViewById(com.clinicalaluz.clinicaapp.R.id.animation_viewcheck)
+        animationView.playAnimation()
+        dialogBuilder.setView(v)
+        btcerrrar = v.findViewById(com.clinicalaluz.clinicaapp.R.id.idbtncerrardialogo) as Button
+        tvmensaje = v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvmensaje)
+        tvmensaje.text = mensaje
+        val alert = dialogBuilder.create()
+        btcerrrar.setOnClickListener {
+            alert.dismiss()
+        }
+        alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert.show()
     }
 }

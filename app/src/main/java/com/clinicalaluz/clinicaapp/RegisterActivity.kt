@@ -3,11 +3,14 @@ package com.clinicalaluz.clinicaapp
 import android.R
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -63,40 +66,58 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         var email  =  binding.regEmail.text.toString()
         var clave  =  binding.regPassword.text.toString()
 
-        when {
-            documento.length in 9..7 -> {
-                Toast.makeText(applicationContext ,"El Numero de Documento con 8 digitos" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(documento) -> {
-                Toast.makeText(applicationContext ,"Escribir Documento" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(nombres) -> {
-                Toast.makeText(applicationContext ,"Escribir Nombres" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(apellidos) -> {
-                Toast.makeText(applicationContext ,"Escribir Apellidos" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(clave) -> {
-                Toast.makeText(applicationContext ,"Escribir Clave" , Toast.LENGTH_SHORT).show()
-            }
-            else -> {
+        if (documento.length<=7 || documento.length>=9){
+          //  Toast.makeText(applicationContext ,"El Numero de Documento con 8 digitos" , Toast.LENGTH_SHORT).show()
+            binding.regDocIdentity.setError("El Numero de Documento con 8 digitos")
+        }
+        else if ( TextUtils.isEmpty(documento))
+        {
+            binding.regDocIdentity.setError("Escribir Documento")
+
+        }else if (TextUtils.isEmpty(nombres)){
+            binding.regName.setError("Escribir Nombres")
+        }
+        else if (TextUtils.isEmpty(apellidos)){
+            binding.regLastname.setError("Escribir Apellidos")
+        }
+        else if (TextUtils.isEmpty(email)){
+            binding.regEmail.setError("Escribir Correo")
+        }
+        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.regEmail.setError("Coreo no valido")
+        }
+        else if (TextUtils.isEmpty(clave)){
+            binding.regPassword.setError("Escribir Clave")
+        }
+        else if (clave.length<6){
+
+            binding.regPassword.setError("Clave de 6 digitos")
+        }
+        else {
+
                 val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
                 val stringRequest = object : StringRequest(
                     Request.Method.POST, url, Response.Listener { response ->
                         try {
-                            val obj = (response)
-                            Log.e("resultadop",response.toString())
+
+                           // Log.e("resultadop",response.toString())
                             if (response.toString().trim()== "Enviado"){
-                                men("Se ha enviando un mensaje a su correo","Verifica tu bandeja de span")
+                                //men("Se ha enviando un mensaje a su correo","Verifica tu bandeja de span")
+                                men("Registrado","Comuniquese con la clinica para activar su Cuenta")
                             }else if(response.toString().trim()== "Existe"){
-                                warning("Dni ya se encuentra registrado")
+                                //warning("Dni ya se encuentra registrado")
+                                // mensaje: String,descrpcion:String,correo:String,cod:String,nombre:String,clave:String
+                                dialogpdate("Su Dni ya existe en nuestros registros","Desea actualizar su Correo ", email,documento,nombres,clave)
+
+                            }else if(response.toString().trim()=="ExisteCorreo"){
+                                //dialogpdate("Su Correo ya existe","Desea actualizar su Datos ? ", email,documento,nombres,clave)
+                                warning("Este correo ya se encuentra registrado")
                             }else{
-                                 Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext ,"E: "+response.toString()+"" , Toast.LENGTH_SHORT).show()
                             }
-                           //Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
 
                         } catch (e: JSONException) {
-                            Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "ex :"+e.message.toString()+"", Toast.LENGTH_LONG).show()
                             e.printStackTrace()
                         }
                     },
@@ -129,10 +150,97 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
                 )
                 stringRequest.setShouldCache(false)
                 VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
-            }
         }
     }
 
+
+    private fun dialogpdate(mensaje: String,descrpcion:String,correo:String,cod:String,nombre:String,clave:String){
+        val dialogBuilder = AlertDialog.Builder(this)
+        val btcerrrar: Button
+        val btnupdate: Button
+        val tvmensaje: TextView
+        var tvedsderpcion :TextView
+        val  v = LayoutInflater.from(applicationContext).inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_upate, null)
+        val animationView:LottieAnimationView = v.findViewById(com.clinicalaluz.clinicaapp.R.id.animation_viewcheck)
+        animationView.playAnimation()
+        dialogBuilder.setView(v)
+        btcerrrar = v.findViewById(com.clinicalaluz.clinicaapp.R.id.btncerrar) as Button
+        btnupdate = v.findViewById(com.clinicalaluz.clinicaapp.R.id.btnactualizar) as Button
+        tvmensaje = v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvmensajeudpate)
+        tvedsderpcion=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvdecripcion2)
+        tvedsderpcion.text=descrpcion
+        tvmensaje.text = mensaje
+        val alert = dialogBuilder.create()
+        btcerrrar.setOnClickListener {
+            alert.dismiss()
+        }
+        btnupdate.setOnClickListener {
+            alert.dismiss()
+            UpodateInfo(nombre,cod,correo,clave )
+        }
+        alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert.show()
+    }
+
+    private  fun  UpodateInfo(nombres:String, documento:String, email:String,clave:String){
+        val url = "http://161.132.198.52:8080/app_laluz/pdoActualizarDatos.php?"
+        var progres = ProgressDialog(this)
+        progres.setMessage("Cargando")
+        progres.show()
+        val stringRequest = object : StringRequest(
+            Request.Method.POST, url, Response.Listener { response ->
+                try {
+                    if (response.toString().trim() == "Enviado"){
+//                        val preferences: SharedPreferences = this@RegisterActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+//                        val editor = preferences.edit()
+//                        editor.putString("nombres", nombres)
+//                        editor.putString("dni", documento)
+//                        editor.putString("correo", email)
+//                        editor.commit()
+                       //  men("Actualizado","Se ha Actualizado su correo")
+                        men("Actualizado","Comuniquese con la clinica para activar su Cuenta")
+                        val singleToneClass: SingleToneClass = SingleToneClass.instance
+                        singleToneClass.data=documento
+
+                    }else if (response.toString().trim()=="ExisteCorreo")   {
+                        warning("Este Correo ya esta en uso")
+                    }else{
+                        Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
+                    }
+                    progres.dismiss()
+                } catch (e: JSONException) {
+                    Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
+                    progres.dismiss()
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(volleyError: VolleyError) {
+                    Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                    progres.dismiss()
+                }
+            })
+        {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params.put("doc",documento)
+                params.put("email",email)
+                params.put("clave",clave)
+                params.put("logueo","dni")
+                return params
+            }
+        }
+        stringRequest.setRetryPolicy(
+            DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+        )
+        stringRequest.setShouldCache(false)
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
+    }
     private fun men(mensaje: String,descrpcion:String){
         val dialogBuilder = AlertDialog.Builder(this)
         val btcerrrar: Button
@@ -150,6 +258,7 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         val alert = dialogBuilder.create()
         btcerrrar.setOnClickListener {
             alert.dismiss()
+            finish()
         }
         alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alert.show()

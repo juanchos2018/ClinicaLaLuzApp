@@ -14,10 +14,11 @@
         android:layout_marginBottom="4dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="2dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:layout_gravity="center"
             android:id="@+id/loy"
             android:padding="2dp"
             android:orientation="vertical"
@@ -34,20 +35,21 @@
                 />
             -->
             <ImageView
+                android:layout_gravity="center"
                 android:id="@+id/imageView2"
-                android:layout_width="match_parent"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:layout_weight="1"
-                android:maxHeight="105dp"
+                android:maxWidth="105dp"
                 android:src="@drawable/ic_launcher_background">
-
             </ImageView>
             <TextView
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:id="@+id/textView2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="Demo"
@@ -56,7 +58,6 @@
                 android:layout_marginRight="2dp"
                 android:textColor="#05ACA1"
                 android:textSize="12sp" />
-
             <TextView
                 android:id="@+id/tvespecilidada"
                 android:text="esepciñlidad"

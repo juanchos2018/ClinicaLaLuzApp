@@ -4,12 +4,14 @@ import android.R
 import android.R.string
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.DatePicker
@@ -46,12 +48,12 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
       //  setContentView(R.layout.activity_register_gmail)
         binding = ActivityRegisterGmailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         pickDate()
 
         binding.buttonRegCreate.setOnClickListener {
             sendPost()
         }
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
@@ -90,9 +92,34 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
           //  Toast.makeText(applicationContext, arrayNombres.size.toString(), Toast.LENGTH_LONG).show()
             //for (item in arrayNombres)
                // println(item)
-
         }
+
+        binding.returnRegister.setOnClickListener { finish() }
+
     }
+
+    private fun men(mensaje: String,descrpcion:String){
+        val dialogBuilder = AlertDialog.Builder(this)
+        val btcerrrar: Button
+        val tvmensaje: TextView
+        var tvedsderpcion :TextView
+        val  v = LayoutInflater.from(applicationContext).inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_correo, null)
+        val animationView:LottieAnimationView = v.findViewById(com.clinicalaluz.clinicaapp.R.id.animation_viewcheck)
+        animationView.playAnimation()
+        dialogBuilder.setView(v)
+        btcerrrar = v.findViewById(com.clinicalaluz.clinicaapp.R.id.idbtncerrardialogo) as Button
+        tvmensaje = v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvmensaje)
+        tvedsderpcion=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvdecripcion)
+        tvedsderpcion.text=descrpcion
+        tvmensaje.text = mensaje
+        val alert = dialogBuilder.create()
+        btcerrrar.setOnClickListener {
+            alert.dismiss()
+        }
+        alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert.show()
+    }
+
 
     fun sendPost() {
         var documento  =  binding.regDocIdentity.text.toString()
@@ -102,82 +129,175 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         var celular  =  binding.regPhone.text.toString()
         var email  =  binding.regEmail.text.toString()
 
-        when {
-            documento.length in 9..7 -> {
-                Toast.makeText(applicationContext ,"El Numero de Documento con 8 digitos" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(documento) -> {
-                Toast.makeText(applicationContext ,"Escribir Documento" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(nombres) -> {
-                Toast.makeText(applicationContext ,"Escribir Nombres" , Toast.LENGTH_SHORT).show()
-            }
-            TextUtils.isEmpty(apellidos) -> {
-                Toast.makeText(applicationContext ,"Escribir Apellidos" , Toast.LENGTH_SHORT).show()
-            }
+        if (documento.length<=7 || documento.length>=9){
+            binding.regDocIdentity.setError("El Numero de Documento con 8 digitos")
+        }
+        else if ( TextUtils.isEmpty(documento))
+        {
+            binding.regDocIdentity.setError("Escribir Documento")
+        }else if (TextUtils.isEmpty(nombres)){
+            binding.regName.setError("Escribir Nombres")
+        }
+        else if (TextUtils.isEmpty(apellidos)){
+            binding.regLastname.setError("Escribir Apellidos")
+        }
+        else if (TextUtils.isEmpty(email)){
+            binding.regEmail.setError("Escribir Correo")
+        }
+        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.regEmail.setError("Coreo no valido")
+        }
+      else{
+            val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
+            val stringRequest = object : StringRequest(
+                Request.Method.POST, url, Response.Listener { response ->
+                    try {
+                        if (response.toString().trim() == "Enviado"){
+                            val preferences: SharedPreferences = this@RegisterGmailActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences.edit()
+                            editor.putString("nombres", nombres)
+                            editor.putString("dni", documento)
+                            editor.putString("correo", email)
+                            editor.putString("logueo", "gmail")
+                            editor.commit()
+                            men("Registrado","Comuniquese con la clinica para activar su Cuenta")
+                            val singleToneClass: SingleToneClass = SingleToneClass.instance
+                            singleToneClass.data=documento
 
-            else -> {
-                val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
-                val stringRequest = object : StringRequest(
-                    Request.Method.POST, url, Response.Listener { response ->
-                        try {
-                            val obj = (response)
+                        }else if(response.toString().trim() == "Existe"){
+                           // warning("Dni ya se encuentra registrado")
+                            dialogpdate("Su Dni ya existe","Desea actualizar su Correo "+ email,email,documento,nombres)
 
-                            if (response.toString().trim() == "Enviado"){
-                                val preferences: SharedPreferences = this@RegisterGmailActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
-                                val editor = preferences.edit()
-                                editor.putString("nombres", nombres)
-                                editor.putString("dni", documento)
-                                editor.putString("correo", email)
-                                editor.commit()
-                                val singleToneClass: SingleToneClass = SingleToneClass.instance
-                                singleToneClass.data=documento
-                                finish()
-                            }else if(response.toString().trim() == "Existe"){
-                                warning("Dni ya se encuentra registrado")
-                            }else{
-                                Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
-
-                            }
-
-                        } catch (e: JSONException) {
-                            Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
-                            e.printStackTrace()
+                        }else{
+                            Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
                         }
-                    },
-                    object : Response.ErrorListener {
-                        override fun onErrorResponse(volleyError: VolleyError) {
-                            Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
-                        }
-                    })
-                {
-                    @Throws(AuthFailureError::class)
-                    override fun getParams(): Map<String, String> {
-                        val params = HashMap<String, String>()
-                        params.put("doc",documento)
-                        params.put("nombres",nombres)
-                        params.put("apellidos",apellidos)
-                        params.put("fecha",fechasendpost)
-                        params.put("celular",celular)
-                        params.put("email",email)
-                        params.put("clave","")
-                        params.put("logueo","gmail")
-
-                        return params
+                    } catch (e: JSONException) {
+                        Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
+                        e.printStackTrace()
                     }
+                },
+                object : Response.ErrorListener {
+                    override fun onErrorResponse(volleyError: VolleyError) {
+                        Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                    }
+                })
+               {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params.put("doc",documento)
+                    params.put("nombres",nombres)
+                    params.put("apellidos",apellidos)
+                    params.put("fecha",fechasendpost)
+                    params.put("celular",celular)
+                    params.put("email",email)
+                    params.put("clave","")
+                    params.put("logueo","gmail")
+                    return params
                 }
-                stringRequest.setRetryPolicy(
-                    DefaultRetryPolicy(
-                        10000,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                    )
-                )
-                stringRequest.setShouldCache(false)
-                VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
             }
+            stringRequest.setRetryPolicy(
+                DefaultRetryPolicy(
+                    10000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                )
+            )
+            stringRequest.setShouldCache(false)
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
         }
     }
+
+    private fun dialogpdate(mensaje: String,descrpcion:String,correo:String,cod:String,nombre:String){
+        val dialogBuilder = AlertDialog.Builder(this)
+        val btcerrrar: Button
+        val btnupdate: Button
+        val tvmensaje: TextView
+        var tvedsderpcion :TextView
+        val  v = LayoutInflater.from(applicationContext).inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_upate, null)
+        val animationView:LottieAnimationView = v.findViewById(com.clinicalaluz.clinicaapp.R.id.animation_viewcheck)
+        animationView.playAnimation()
+        dialogBuilder.setView(v)
+        btcerrrar = v.findViewById(com.clinicalaluz.clinicaapp.R.id.btncerrar) as Button
+        btnupdate = v.findViewById(com.clinicalaluz.clinicaapp.R.id.btnactualizar) as Button
+        tvmensaje = v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvmensajeudpate)
+        tvedsderpcion=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvdecripcion2)
+        tvedsderpcion.text=descrpcion
+        tvmensaje.text = mensaje
+        val alert = dialogBuilder.create()
+        btcerrrar.setOnClickListener {
+            alert.dismiss()
+        }
+        btnupdate.setOnClickListener {
+            UpodateInfo(nombre,cod,correo )
+        }
+        alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert.show()
+    }
+
+    private  fun  UpodateInfo(nombres:String, documento:String, email:String){
+        val url = "http://161.132.198.52:8080/app_laluz/pdoActualizarDatos.php?"
+        var progres =ProgressDialog(this)
+        progres.setMessage("Cargando")
+        progres.show()
+
+        val stringRequest = object : StringRequest(
+            Request.Method.POST, url, Response.Listener { response ->
+                try {
+                    if (response.toString().trim() == "Enviado"){
+                        val preferences: SharedPreferences = this@RegisterGmailActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                        val editor = preferences.edit()
+                        editor.putString("nombres", nombres)
+                        editor.putString("dni", documento)
+                        editor.putString("correo", email)
+                        editor.commit()
+                     //   men("Actualizado","Se ha Actualizado su correo")
+                        men("Actualizado","Comuniquese con la clinica para activar su Cuenta")
+                        val singleToneClass: SingleToneClass = SingleToneClass.instance
+                        singleToneClass.data=documento
+
+                    }else if(response.toString().trim() == "Existe"){
+                        warning("Dni ya se encuentra registrado")
+                    }else{
+                        Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
+                    }
+                    progres.dismiss()
+                } catch (e: JSONException) {
+                    Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
+                    progres.dismiss()
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(volleyError: VolleyError) {
+                    Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                    progres.dismiss()
+                    }
+            })
+        {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params.put("doc",documento)
+                params.put("nombres",nombres)
+                params.put("fecha",fechasendpost)
+                params.put("email",email)
+                params.put("clave","")
+                params.put("logueo","gmail")
+                return params
+            }
+        }
+        stringRequest.setRetryPolicy(
+            DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+        )
+        stringRequest.setShouldCache(false)
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
+    }
+
     private fun warning(mensaje: String){
         val dialogBuilder = AlertDialog.Builder(this)
         val btcerrrar: Button
@@ -192,6 +312,7 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         val alert = dialogBuilder.create()
         btcerrrar.setOnClickListener {
             alert.dismiss()
+            finish()
         }
         alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alert.show()
@@ -211,11 +332,11 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         year = cal.get(Calendar.YEAR)
     }
 
+
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
         savedMonth = month
         savedYear = year
-
         getDateCalendar()
         binding.regDate.text = "$savedDay/${savedMonth+1}/$savedYear"
         fechasendpost= String.format("$savedYear-${savedMonth+1}-$savedDay")

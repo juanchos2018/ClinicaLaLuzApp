@@ -13,7 +13,7 @@
     <color name="presionGris">#494949</color>
     <color name="glucosaGris">#494949</color>
     <color name="buttonLogin">#FFFFFF</color>
-
+    <color name="verde">#27a001</color>
     <color name="colorBackground">#FFFFFF</color>
-
+        <color name="celeste">#31B3FF</color>
 </resources>

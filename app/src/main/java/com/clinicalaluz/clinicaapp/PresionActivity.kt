@@ -95,24 +95,38 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }else{
             val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
             var   dni = preferences.getString("dni", null)
+            var   TipoSE = preferences.getString("logueo", null)
             if (dni==null){
-                val intent = Intent(this, RegisterGmailActivity::class.java)
-                startActivity(intent)
+
+                if (TipoSE=="gmail"){
+                    val intent = Intent(this, RegisterGmailActivity::class.java)
+                    startActivity(intent)
+                }else if(TipoSE=="dni"){
+                    val intent = Intent(this, RegisterActivity::class.java)
+                    startActivity(intent)
+                }else if (TipoSE=="facebook"){
+                    val intent = Intent(this, RegisterFacebookActivity::class.java)
+                    startActivity(intent)
+                }
+               // val intent = Intent(this, RegisterGmailActivity::class.java)
+               // startActivity(intent)
             }else{
-                val newNivelGlucosa = (binding.newPulso.text.toString()).toInt()
+
                 val newSistolica = (binding.newSistolica.text.toString()).toInt()
                 val newDiastolica = (binding.newDiastolica.text.toString()).toInt()
                 var  newPulso =(binding.newPulso.text.toString()).toInt()
 
                 val url = "http://161.132.198.52:8080/app_laluz/pdoInsertPresion.php?"
-                var fechaenvio ="2021-07-22 12:00:00.000"
+
                 val stringRequest = object : StringRequest(Request.Method.POST, url,
                     Response.Listener { response ->
                         try {
-                            val obj = (response)
-                            if (response.toString().equals("Succes")){
-                                Toast.makeText(applicationContext ,"Registrado con existo" , Toast.LENGTH_SHORT).show()
+                            if (response.toString().trim()=="Succes"){
+                                Toast.makeText(applicationContext ,"Registrado con exito" , Toast.LENGTH_SHORT).show()
                                 consultData()
+                                binding.newPulso.text.clear()
+                                binding.newSistolica.text.clear()
+                                binding.newDiastolica.text.clear()
                             }
 
                         } catch (e: JSONException) {
@@ -147,15 +161,12 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 stringRequest.setShouldCache(false)
                 VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
             }
-
         }
     }
     private fun consultData(){
         val xvalues = ArrayList<String>()
         val lineentry = ArrayList<Entry>()
-
         val url = "http://161.132.198.52:8080/app_laluz/pdoSelectPresion.php?doc=$DniPaciente"
-        //url = "http://192.168.3.233:8080/app_laluz/pdoSelectAzucar.php?doc=$DniPaciente"
         val rq = Volley.newRequestQueue(this)
         val arr = JsonArrayRequest(Request.Method.GET, url, null,
             { response ->
@@ -163,7 +174,6 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                     val fecha = response.getJSONObject(x).getString("FECHA")
                     xvalues.add(fecha)
                     val presion = response.getJSONObject(x).getString("REG_PULSO")
-
                     val presionf = presion.toFloat()
                     lineentry.add(Entry(presionf, x))
                 }
