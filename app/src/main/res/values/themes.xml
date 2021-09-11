@@ -14,6 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="FacebookLoginButton">
+        <item name="android:height">152sp</item>
+        <item name="android:background">@drawable/btn_borde1</item>
+        <item name="android:layout_marginTop">10dp</item>
+
+
+    </style>
 
 
 </resources>

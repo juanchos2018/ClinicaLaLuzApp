@@ -145,13 +145,19 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
             binding.regEmail.setError("Escribir Correo")
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.regEmail.setError("Coreo no valido")
+            binding.regEmail.setError("Correo no valido")
         }
       else{
+
+            var progres = ProgressDialog(this)
+            progres.setMessage("Cargando...")
+            progres.show()
+
             val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
             val stringRequest = object : StringRequest(
                 Request.Method.POST, url, Response.Listener { response ->
                     try {
+                        progres.dismiss()
                         if (response.toString().trim() == "Enviado"){
                             val preferences: SharedPreferences = this@RegisterGmailActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
                             val editor = preferences.edit()
@@ -163,22 +169,52 @@ class RegisterGmailActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                             men("Registrado","Comuniquese con la clinica para activar su Cuenta")
                             val singleToneClass: SingleToneClass = SingleToneClass.instance
                             singleToneClass.data=documento
+                            finish()
 
-                        }else if(response.toString().trim() == "Existe"){
-                           // warning("Dni ya se encuentra registrado")
-                            dialogpdate("Su Dni ya existe","Desea actualizar su Correo "+ email,email,documento,nombres)
+                        }else if(response.toString().trim() == "Modificado") {
+                            val preferences: SharedPreferences = this@RegisterGmailActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences.edit()
+                            editor.putString("nombres", nombres)
+                            editor.putString("dni", documento)
+                            editor.putString("correo", email)
+                            editor.putString("logueo", "facebook")
+                            editor.commit()
+                            val singleToneClass: SingleToneClass = SingleToneClass.instance
+                            singleToneClass.data=documento
+                            men("Registrado","Comuniquese con la clinica para activar su Cuenta")
 
-                        }else{
+                            // warning("Dni ya se encuentra registrado, Comuniquese con la clinica para activar su Cuenta ")
+                            //   dialogpdate("Su Dni ya existe","Desea actualizar su Correo "+ email,email,documento,nombres)
+                        } else if(response.toString().trim()=="Usado")    {
+                            warning("Este Correo Ya esta En Uso por otro Usuario")
+                        }else if(response.toString().trim()=="ExisteCorreo"){
+                            warning("Este Correo Ya esta En Uso por otro Usuario")
+                        }
+                        else if (response.toString().trim()=="Active"){
+                            val preferences: SharedPreferences = this@RegisterGmailActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences.edit()
+                            editor.putString("nombres", nombres)
+                            editor.putString("dni", documento)
+                            editor.putString("correo", email)
+                            editor.putString("logueo", "facebook")
+                            editor.commit()
+                            val singleToneClass: SingleToneClass = SingleToneClass.instance
+                            singleToneClass.data=documento
+                            men("Sus Datos ya existen","Comuniquese con la clinica para activar su Cuenta")
+                        }
+                        else{
                             Toast.makeText(applicationContext ,""+response.toString()+"" , Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: JSONException) {
                         Toast.makeText(applicationContext, ""+response.toString()+"", Toast.LENGTH_LONG).show()
                         e.printStackTrace()
+                        progres.dismiss()
                     }
                 },
                 object : Response.ErrorListener {
                     override fun onErrorResponse(volleyError: VolleyError) {
                         Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                        progres.dismiss()
                     }
                 })
                {

@@ -2,6 +2,8 @@ package com.clinicalaluz.clinicaapp
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -36,7 +38,7 @@ class RegisterFacebookActivity : AppCompatActivity() , DatePickerDialog.OnDateSe
     private var savedYear = 0
     private var fechasendpost=""
 
-
+   private var cumple=""
     private  lateinit var binding:ActivityRegisterFacebookBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +46,9 @@ class RegisterFacebookActivity : AppCompatActivity() , DatePickerDialog.OnDateSe
        // setContentView(R.layout.activity_register_facebook)
         binding = ActivityRegisterFacebookBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
+        cumple = preferences.getString("cumple", null).toString()
 
         pickDate()
         // val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
@@ -62,6 +67,7 @@ class RegisterFacebookActivity : AppCompatActivity() , DatePickerDialog.OnDateSe
             }, 2000)
 
         }
+        binding.regDate2.text=cumple
         binding.buttonRegCreate2.setOnClickListener {
             sendPost()
         }
@@ -119,14 +125,18 @@ class RegisterFacebookActivity : AppCompatActivity() , DatePickerDialog.OnDateSe
         else if (TextUtils.isEmpty(email)){
             binding.regEmail2.setError("Escribir Correo")
         }
-        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.regEmail2.setError("Coreo no valido")
-        }
+
         else{
+
+            var progres = ProgressDialog(this)
+            progres.setMessage("Cargando...")
+            progres.show()
+
             val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
             val stringRequest = object : StringRequest(
                 Request.Method.POST, url, Response.Listener { response ->
                     try {
+                        progres.show()
                         if (response.toString().trim() == "Enviado"){
                             val preferences: SharedPreferences = this@RegisterFacebookActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
                             val editor = preferences.edit()
@@ -140,22 +150,60 @@ class RegisterFacebookActivity : AppCompatActivity() , DatePickerDialog.OnDateSe
                             singleToneClass.data=documento
                             men("Registrado","Comuniquese con la clinica para activar su Cuenta")
 
-                        }else if(response.toString().trim() == "Existe"){
-                            warning("Dni ya se encuentra registrado")
-                            //dialogpdate("Su Dni ya existe","Desea actualizar su Correo "+ email,email,documento,nombres)
-                        }else if(response.toString().trim()=="ExisteCorreo")    {
-                            Toast.makeText(applicationContext ,"Su Correo ya Existe" , Toast.LENGTH_SHORT).show()
-                        }else{
+
+                        }
+                        else if (response.toString().trim()=="Modificado"){
+                            val preferences: SharedPreferences = this@RegisterFacebookActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences.edit()
+                            editor.putString("nombres", nombres)
+                            editor.putString("dni", documento)
+                            editor.putString("correo", email)
+                            editor.putString("logueo", "facebook")
+                            editor.commit()
+                            val singleToneClass: SingleToneClass = SingleToneClass.instance
+                            singleToneClass.data=documento
+                            men("Registrado","Comuniquese con la clinica para activar su Cuenta")
+
+
+                        }
+                        else if (response.toString().trim()=="Usado"){
+                            warning("Este Correo Ya esta En Uso por otro Usuario")
+                        }
+                        else if (response.toString().trim()=="ExisteCorreo"){
+                            warning("Este Correo Ya esta En Uso por otro Usuario")
+                        }
+                        else if (response.toString().trim()=="Active"){
+                            val preferences: SharedPreferences = this@RegisterFacebookActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences.edit()
+                            editor.putString("nombres", nombres)
+                            editor.putString("dni", documento)
+                            editor.putString("correo", email)
+                            editor.putString("logueo", "facebook")
+                            editor.commit()
+                            val singleToneClass: SingleToneClass = SingleToneClass.instance
+                            singleToneClass.data=documento
+                            men("Sus Datos ya existen","Comuniquese con la clinica para activar su Cuenta")
+
+                        }
+                        else{
                             Toast.makeText(applicationContext ,"E: "+response.toString()+"" , Toast.LENGTH_SHORT).show()
                         }
+//                        else if(response.toString().trim() == "Existe"){
+//                            warning("Dni ya se encuentra registrado, Comuniquese con la clinica para activar su Cuenta ")
+//                        }else if(response.toString().trim()=="ExisteCorreo")    {
+//                            warning("Su Correo ya Existe")
+//                        }
+
                     } catch (e: JSONException) {
                         Toast.makeText(applicationContext, "C: "+response.toString()+"", Toast.LENGTH_LONG).show()
                         e.printStackTrace()
+                        progres.show()
                     }
                 },
                 object : Response.ErrorListener {
                     override fun onErrorResponse(volleyError: VolleyError) {
                         Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                        progres.show()
                     }
                 })
                {

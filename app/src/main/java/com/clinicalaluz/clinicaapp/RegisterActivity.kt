@@ -95,35 +95,82 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         }
         else {
 
+            var progres = ProgressDialog(this)
+            progres.setMessage("Cargando...")
+            progres.show()
                 val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
                 val stringRequest = object : StringRequest(
                     Request.Method.POST, url, Response.Listener { response ->
                         try {
-
+                            progres.dismiss()
                            // Log.e("resultadop",response.toString())
                             if (response.toString().trim()== "Enviado"){
-                                //men("Se ha enviando un mensaje a su correo","Verifica tu bandeja de span")
+                                val preferences: SharedPreferences = this@RegisterActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                                val editor = preferences.edit()
+                                editor.putString("nombres", nombres)
+                                editor.putString("dni", documento)
+                                editor.putString("correo", email)
+                                editor.putString("logueo", "dni")
+                                editor.commit()
+                                val singleToneClass: SingleToneClass = SingleToneClass.instance
+                                singleToneClass.data=documento
                                 men("Registrado","Comuniquese con la clinica para activar su Cuenta")
-                            }else if(response.toString().trim()== "Existe"){
-                                //warning("Dni ya se encuentra registrado")
-                                // mensaje: String,descrpcion:String,correo:String,cod:String,nombre:String,clave:String
-                                dialogpdate("Su Dni ya existe en nuestros registros","Desea actualizar su Correo ", email,documento,nombres,clave)
+
+                                //men("Se ha enviando un mensaje a su correo","Verifica tu bandeja de span")
+                               // men("Registrado","Comuniquese con la clinica para activar su Cuenta")
+                            }else if(response.toString().trim()== "Modificado") {
+                                val preferences: SharedPreferences =
+                                    this@RegisterActivity.getSharedPreferences(
+                                        "datosuser",
+                                        MODE_PRIVATE
+                                    )
+                                val editor = preferences.edit()
+                                editor.putString("nombres", nombres)
+                                editor.putString("dni", documento)
+                                editor.putString("correo", email)
+                                editor.putString("logueo", "dni")
+                                editor.commit()
+                                val singleToneClass: SingleToneClass = SingleToneClass.instance
+                                singleToneClass.data = documento
+                                men(
+                                    "Registrado",
+                                    "Comuniquese con la clinica para activar su Cuenta"
+                                )
+
+                            }
+                            else if (response.toString().trim()=="Usado"){
+                                    warning("Este Correo Ya esta En Uso por otro Usuario")
 
                             }else if(response.toString().trim()=="ExisteCorreo"){
-                                //dialogpdate("Su Correo ya existe","Desea actualizar su Datos ? ", email,documento,nombres,clave)
-                                warning("Este correo ya se encuentra registrado")
-                            }else{
+                                warning("Este Correo Ya esta En Uso por otro Usuario")
+                            }
+                            else if (response.toString().trim()=="Active"){
+                                val preferences: SharedPreferences = this@RegisterActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                                val editor = preferences.edit()
+                                editor.putString("nombres", nombres)
+                                editor.putString("dni", documento)
+                                editor.putString("correo", email)
+                                editor.putString("logueo", "facebook")
+                                editor.commit()
+                                val singleToneClass: SingleToneClass = SingleToneClass.instance
+                                singleToneClass.data=documento
+                                men("Sus Datos ya existen","Comuniquese con la clinica para activar su Cuenta")
+
+                            }
+                            else{
                                 Toast.makeText(applicationContext ,"E: "+response.toString()+"" , Toast.LENGTH_SHORT).show()
                             }
 
                         } catch (e: JSONException) {
                             Toast.makeText(applicationContext, "ex :"+e.message.toString()+"", Toast.LENGTH_LONG).show()
                             e.printStackTrace()
+                            progres.dismiss()
                         }
                     },
                     object : Response.ErrorListener {
                         override fun onErrorResponse(volleyError: VolleyError) {
                             Toast.makeText(applicationContext, "error:"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                            progres.dismiss()
                         }
                     })
                 {

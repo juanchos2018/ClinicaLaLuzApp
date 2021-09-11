@@ -19,13 +19,12 @@
             android:layout_width="wrap_content"
             app:contentScrim="@drawable/background_login"
             app:title="@string/app_name"
-
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/imgDoctor"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="320dp"
                 android:src="@drawable/default_profile_image"
                 android:scaleType="centerCrop"/>
             <androidx.appcompat.widget.Toolbar

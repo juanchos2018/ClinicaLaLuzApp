@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -14,13 +13,13 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.clinicalaluz.clinicaapp.databinding.ActivityMenuBinding
 import com.clinicalaluz.clinicaapp.databinding.ActivityMenuNuevoBinding
 import com.facebook.AccessToken
 import com.facebook.Profile
@@ -55,7 +54,6 @@ class MenuNuevoActivity : AppCompatActivity() {
         TipoSE = preferences.getString("logueo", null).toString()
         TipoSesion = intent.getSerializableExtra("TipoSesion").toString()
         token=intent.getSerializableExtra("token").toString()
-
 
 
         if (TipoSesion == "gmail"){
@@ -133,8 +131,8 @@ class MenuNuevoActivity : AppCompatActivity() {
             }
         }
 
+        //botones  de cerrar sesion
 
-        //botones
         binding.btncerrarsesion.setOnClickListener {
             if (TipoSesion=="gmail"){
                 mGoogleSignInClient.signOut()
@@ -177,7 +175,6 @@ class MenuNuevoActivity : AppCompatActivity() {
                 }else if (TipoSE=="facebook"){
                     warningDatos("Registre sus Datos","RegisterFacebookActivity")
                 }
-
             }else{
                 veririqueCheck(dniuserpac.toString(),actividad)
             }
@@ -208,6 +205,11 @@ class MenuNuevoActivity : AppCompatActivity() {
     }
 
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        //codigo adicional
+        finish()
+    }
     private fun goLoginScreen() {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -217,6 +219,9 @@ class MenuNuevoActivity : AppCompatActivity() {
     private fun displayProfileInfo(profile: Profile) {
         val id = profile.id
         val name = profile.name
+        val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
+        var correo = preferences.getString("correo", null).toString()
+
         try {
             val photoUrl = profile.getProfilePictureUri(100, 100).toString()
             if (photoUrl!=null){
@@ -228,11 +233,12 @@ class MenuNuevoActivity : AppCompatActivity() {
                 binding.imgperfil.setImageResource(com.clinicalaluz.clinicaapp.R.drawable.default_profile_image)
             }
         } catch (e: ArithmeticException) {
-            // handler
+            //handler
         } finally {
-            // optional finally block
+            //optional finally block
         }
         binding.tvnombreuser.setText(name+"")
+        binding.tvcorreo.text=correo
 
     }
 

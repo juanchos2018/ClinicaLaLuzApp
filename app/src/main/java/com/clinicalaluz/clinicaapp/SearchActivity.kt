@@ -1,5 +1,6 @@
 package com.clinicalaluz.clinicaapp
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -7,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
@@ -15,42 +17,45 @@ import com.clinicalaluz.clinicaapp.databinding.ActivitySearchBinding
 
 
 class SearchActivity : AppCompatActivity() {
+
     private lateinit var binding : ActivitySearchBinding
-
     private  lateinit var adaptergrid :AdapterGridView
-
     val list = ArrayList<Medic>()
 
-
+    //private  var adapter2: SpinAdapter2? = null
+    var id_bddato=""
+    private  lateinit var  adapter2:SpinAdapter2
+    val listaSedes2: ArrayList<ClsSedes> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val listSede = resources.getStringArray(R.array.sede)
-        val adapterSede = ArrayAdapter(this,
-            android.R.layout.simple_spinner_dropdown_item, listSede)
-        binding.spinnerSede.adapter = adapterSede
-        binding.spinnerSede.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                /*val opS = binding.spinner.selectedItem.toString()
-                if (opS == "Tacna"){
-                    Toast.makeText(this@SearchActivity, "BIENVENIDO", Toast.LENGTH_SHORT).show()
-                }*/
-            }
+//        val listSede = resources.getStringArray(R.array.sede)
+//        val adapterSede = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listSede)
+//        binding.spinnerSede.adapter = adapterSede
+//        binding.spinnerSede.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                /*val opS = binding.spinner.selectedItem.toString()
+//                if (opS == "Tacna"){
+//                    Toast.makeText(this@SearchActivity, "BIENVENIDO", Toast.LENGTH_SHORT).show()
+//                }*/
+//            }
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//        }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
         binding.lienarmensaje.setVisibility(View.VISIBLE);
-        loadSpinner()
+
+        //loadSpinner("idbde")
+        loadSedes()
+
         binding.spinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
@@ -59,9 +64,9 @@ class SearchActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                val op = binding.spinner.selectedItem.toString()
+                var op = binding.spinner.selectedItem.toString()
                // Toast.makeText(applicationContext ,op, Toast.LENGTH_SHORT).show()
-                val url = "http://161.132.198.52:8080/cltacna/pdoSelect.php?especialidad=$op"
+                var url = "http://161.132.198.52:8080/app_laluz/pdoSelect.php?especialidad=$op&COD_SUCURSAL=$id_bddato"
                 showMedics(url, op)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -72,18 +77,53 @@ class SearchActivity : AppCompatActivity() {
         binding.returnIma.setOnClickListener {
             finish()
         }
-
         binding.txtbuscar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 // searchPeopleProfile(etbuscarnombre.getText().toString());
                 filtrar(binding.txtbuscar.text)
             }
-
             override fun afterTextChanged(s: Editable) {
 
             }
         })
+
+        binding.spinnerSede.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override   fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //    makeText(SalonesProfesor.this, spinner.getSelectedItemPosition(), LENGTH_SHORT).show();gStrinf
+                val user = adapter2.getItem(position)
+                var idsede: String = user.COD_SUCURSAL
+
+                id_bddato=idsede
+                // val op = binding.spinnerSede.selectedItem.toString()
+               // Toast.makeText(applicationContext , ""+idsede , Toast.LENGTH_SHORT).show()
+                loadSpinner(idsede)
+            }
+            override  fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
+
+//    binding.spinnerSede.onItemSelectedListener= object :
+//            AdapterView.OnItemSelectedListener{
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//            ///     var user: ClsSedes = parent.get(position)
+//                // .getItem(position)
+//                // var positions =listaSedes2.get(position)
+//                val user = adapter2!!.getItem(position)
+//                var idsede: String = user.COD_SUCURSAL
+//           //     val op = binding.spinnerSede.selectedItem.toString()
+//                Toast.makeText(applicationContext , ""+idsede , Toast.LENGTH_SHORT).show()
+//            //    val url = "http://161.132.198.52:8080/cltacna/pdoSelect.php?especialidad=$op"
+//              //  showMedics(url, op)
+//            }
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//        }
 
     }
 
@@ -98,11 +138,34 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun loadSpinner(){
+    fun loadSedes(){
+        val listSedes = ArrayList<String>()
+        ///   listSedes.add("Seleccionar")
+        val urlSpinner = "http://161.132.198.52:8080/app_laluz/pdoSelectSedes.php"
+        val rqSp = Volley.newRequestQueue(this)
+        val js = JsonArrayRequest(Request.Method.GET, urlSpinner, null,
+            { response ->
+                for(x in 0..response.length()-1) {
+                    var nombre = response.getJSONObject(x).getString("NOM_SUCURSAL")
+                    var code = response.getJSONObject(x).getString("COD_SUCURSAL")
+                    var sedes =  ClsSedes(code,nombre)
+                   listaSedes2.add(sedes)
+                }
+                adapter2 = SpinAdapter2(this, R.layout.simple_spinner_dropdown_item, listaSedes2)
+             //   val adapterSpecialty = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listaSedes2)
+                binding.spinnerSede.adapter = adapter2
+            },
+            {
+            })
+        rqSp.add(js)
+    }
+
+    fun loadSpinner(idbd:String){
         val listEspecialidad = ArrayList<String>()
         listEspecialidad.add("Seleccionar")
-        val urlSpinner = "http://161.132.198.52:8080/cltacna/pdoEspecialidad.php"
 
+        val urlSpinner = "http://161.132.198.52:8080/app_laluz/pdoEspecialidad.php?COD_SUCURSAL=$idbd"
+       // val urlSpinner = "http://161.132.198.52:8080/cltacna/pdoEspecialidad.php?COD_SUCURSAL=$idbd"
         val rqSp = Volley.newRequestQueue(this)
         val js = JsonArrayRequest(Request.Method.GET, urlSpinner, null,
             { response ->
@@ -118,8 +181,9 @@ class SearchActivity : AppCompatActivity() {
         rqSp.add(js)
     }
 
-    fun showMedics(url:String, op:String){
+    fun showMedics( url:String, op:String){
         list.clear()
+      //  url = "http://161.132.198.52:8080/cltacna/pdoSelect.php?especialidad=$op"
         binding.simpleProgressBar.setVisibility(View.VISIBLE);
         var img ="https://clinicalaluz.pe/wp-content/uploads/2021/08/dr-Marco-Antonio-Gomez-Neyra-traumatologia-e1628004376829-500x500.png"
         val rq = Volley.newRequestQueue(this)
@@ -136,6 +200,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.listview.setOnItemClickListener { parent, view, position, id ->
                     val intent = Intent(this, MedicoDetalleActivity::class.java)
                     intent.putExtra("nameMedic", list[position])
+                    intent.putExtra("idbd", id_bddato)
                     startActivity(intent)
                 }
                 binding.simpleProgressBar.setVisibility(View.GONE);
@@ -144,16 +209,12 @@ class SearchActivity : AppCompatActivity() {
                 }else{
                     binding.lienarmensaje.setVisibility(View.VISIBLE);
                 }
-
                 ///    binding.listview.adapter = Adapter(this, list)
-
-
                 /*  binding.listview.setOnItemClickListener { parent, view, position, id ->
                       val intent = Intent(this, DetailActivity::class.java)
                       intent.putExtra("nameMedic", list[position])
                       startActivity(intent)
                   } */
-
             },
             {
             })

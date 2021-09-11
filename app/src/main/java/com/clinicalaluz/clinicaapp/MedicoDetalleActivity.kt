@@ -27,6 +27,8 @@ class MedicoDetalleActivity : AppCompatActivity() {
         val collapsingToolbar =  binding.CollapsingTitle as CollapsingToolbarLayout
 
         val medic = intent.getSerializableExtra("nameMedic") as Medic
+        val idbd = intent.getSerializableExtra("idbd")
+
         val medicD = medic.nameMedic
         val specialtyD = medic.nameSpecialty
         //pintado de el campo detailNameMedic
@@ -44,7 +46,7 @@ class MedicoDetalleActivity : AppCompatActivity() {
         val codClave = medic.codMedic
 
         var img ="https://clinicalaluz.pe/wp-content/uploads/2021/08/dr-Marco-Antonio-Gomez-Neyra-traumatologia-e1628004376829-500x500.png"
-        val url = "http://161.132.198.52:8080/cltacna/pdoHorarios.php?codAuxiliar=$codClave"
+        val url = "http://161.132.198.52:8080/app_laluz/pdoHorarios.php?codAuxiliar=$codClave&COD_SUCURSAL=$idbd"
         Picasso.with(this)
             .load(img)
             .into(binding.imgDoctor)
