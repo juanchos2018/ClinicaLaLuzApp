@@ -8,12 +8,21 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
+    <color name="redopaco">#89362B</color>
     <color name="gris">#C6C6C6</color>
+    <color name="gris2">#933B2F</color>
     <color name="grisWsp">#6A6A6A</color>
     <color name="presionGris">#494949</color>
     <color name="glucosaGris">#494949</color>
     <color name="buttonLogin">#FFFFFF</color>
     <color name="verde">#27a001</color>
     <color name="colorBackground">#FFFFFF</color>
-        <color name="celeste">#31B3FF</color>
+    <color name="celeste">#31B3FF</color>
+
+<!--    <selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--        <item android:drawable="@color/pressed_color" android:state_pressed="true"/>-->
+<!--        <item android:drawable="@color/selected_color" android:state_selected="true"/>-->
+<!--        <item android:drawable="@color/focused_color" android:state_focused="true"/>-->
+<!--    </selector>-->
+
 </resources>

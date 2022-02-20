@@ -50,10 +50,23 @@
 
     <string name="facebook_app_id">258055095884775</string>
     <string name="fb_login_protocol_scheme">fb258055095884775</string>
+    <string name="mensaje">Recuerda que debe asistir media hora antes de su hora programada. Una Operadora se podra en contacto con usted para confirmar la hora de si cita en nuestro establecimiento.</string>
 
+
+    <string name="mensaje2">Debito a la alta demanda de pacientes. La reserva de su cita puede ser modificada sin previo aviso. Si desea asegurar la fecha y hora de su reserva debe pagarla haciendo clic en el boton siguiente </string>
+
+    <string name="URL_BASE">http://161.132.198.52:8080/app_laluz</string>
+
+    <string name="URL_PAGINA">https://clinicalaluz.pe/wp-content/uploads</string>
 
     <string-array name="sede">
         <item>Tacna</item>
     </string-array>
+    <string name="title_activity_sub_menu">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

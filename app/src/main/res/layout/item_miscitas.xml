@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:paddingBottom="10dp"
+    >
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="5dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:weightSum="5"
+            android:background="@color/red"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvntipoconsulta"
+                    android:text="Cita en Consultorio"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvespecialidad"
+                    android:textColor="@color/white"
+                    android:text="Cardiologia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+
+                <TextView
+                    android:layout_marginTop="16dp"
+                    android:id="@+id/tvmedico"
+                    android:text="doctor nongre"
+                    android:textColor="@color/white"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_chevron_left_black_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+                <TextView
+                    android:id="@+id/tvminombre"
+                    android:text="minonmbre  "
+                    android:textColor="@color/white"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_usuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+                <TextView
+                    android:id="@+id/tvtsede"
+                    android:text="sede  tacna"
+                    android:textColor="@color/white"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_sedes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+                <TextView
+                    android:id="@+id/tvconsultorio"
+                    android:text="cobnsultrio  "
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/ic_chevron_left_black_white"
+                    android:layout_width="wrap_content"
+                    android:drawablePadding="3dp"
+                    android:layout_height="wrap_content">
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@color/redopaco"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tvnombremes"
+                    android:text="FEB"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+                <TextView
+                    android:id="@+id/tvfechascita3"
+                    android:text="23"
+                    android:textSize="30sp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+                <TextView
+                    android:text="10:40"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</LinearLayout>

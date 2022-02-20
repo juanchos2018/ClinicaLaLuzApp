@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.clinicalaluz.clinicaapp.clases.ClsSedes
 import java.util.ArrayList
 
 class SpinAdapter2 (   private val context: Activity, resource: Int,   private var values: ArrayList<ClsSedes>

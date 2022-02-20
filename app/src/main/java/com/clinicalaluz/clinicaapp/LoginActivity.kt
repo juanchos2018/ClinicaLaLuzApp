@@ -95,6 +95,7 @@ class LoginActivity : AppCompatActivity() {
                                 var  id=jsonObject.optString("COD_PACIENTE")
                                 var  estado =jsonObject.optString("ESTADO")
                                 var  correo =jsonObject.optString("CORREO")
+                                var  cod_auxiliar =jsonObject.optString("COD_AUXILIAR")
                             //    if (estado.equals("1")){
                                 if (logueo=="gmail"){
                                     Toast.makeText(this, "Usted se logueo con su Gmail ", Toast.LENGTH_SHORT).show()
@@ -105,6 +106,8 @@ class LoginActivity : AppCompatActivity() {
                                     editor.putString("id", id)
                                     editor.putString("nombres", nombres)
                                     editor.putString("dni", user)
+                                    editor.putString("cod_auxiliar", cod_auxiliar)
+                                    editor.putString("NUM_DOC_IDENTIDAD", user)
                                     editor.putString("correo", correo)
                                     editor.putString("logueo", "dni")
                                     if(binding.idcheckorecordar.isChecked()){
@@ -210,7 +213,8 @@ class LoginActivity : AppCompatActivity() {
 
         //facebbok
         mCallbackManager = CallbackManager.Factory.create()
-        binding.loginButton.setReadPermissions("email", "public_profile")
+
+        binding.loginButton.setReadPermissions("email", "public_profile", "user_friends")
         binding.loginButton.registerCallback(mCallbackManager, object :
             FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
@@ -223,19 +227,30 @@ class LoginActivity : AppCompatActivity() {
                     if (response != null) {
                         try {
 
-                            val email = `object`.getString("email")
+                            val preferences: SharedPreferences = this@LoginActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
+                            val editor = preferences.edit()
+                            editor.putString("logueo", "facebook")
+                            editor.commit()
 
-                            val birthday = `object`.getString("birthday")
-                            Log.d("eaml", "ema :"+email)
-                            Log.d("eaml", "ema :"+birthday)
-                            //goMainScreen(loginResult.accessToken,email)
-                            handleSingFacebook(email,birthday)
-                            if (email==null){
-                             //   Toast
+                            var email =""
+                            var id = ""
+                            var birthday=""
+                            if (  `object`.getString("email")!=null){
+                                email = `object`.getString("email")
                             }
+                            if ( `object`.getString("birthday")!=null)
+                            {
+                                birthday =`object`.getString("birthday")
+                            }
+                            id =  `object`.getString("id")
+
+                            val number = `object`.getString("phone")
+
+                            handleSingFacebook(number,birthday,id,email)
+                           // Toast.makeText(applicationContext, "Ca :"+ number, Toast.LENGTH_LONG).show()
 
                         } catch (e: JSONException) {
-                            //enttra aqui no value for email
+
                             Toast.makeText(applicationContext, "Ca :"+ e.message, Toast.LENGTH_LONG).show()
                             Log.e("errr",e.message.toString())
                         }
@@ -245,7 +260,6 @@ class LoginActivity : AppCompatActivity() {
                 parameters.putString("fields", "email,birthday")
                 request.parameters = parameters
                 request.executeAsync()
-
           //      Toast.makeText(applicationContext, "facebook:onSuccess:$loginResult", Toast.LENGTH_LONG).show()
                // goMainScreen(loginResult.accessToken)
         }
@@ -288,7 +302,6 @@ class LoginActivity : AppCompatActivity() {
 //        parameters.putString("fields", "email")
 //        request.parameters = parameters
 //        request.executeAndWait()
-
 
         // Toast.makeText(applicationContext, "ee: "+email, Toast.LENGTH_LONG).show()
         val preferences: SharedPreferences = this@LoginActivity.getSharedPreferences("datosuser", MODE_PRIVATE)
@@ -384,7 +397,8 @@ class LoginActivity : AppCompatActivity() {
 //        }
     }
 
-    private  fun handleSingFacebook(personEmail:String,cumple:String){
+    private  fun handleSingFacebook(number:String,birthday:String,id:String,personEmail:String){
+        //   handleSingFacebook(number,birthday,id,email)
         try {
 
             var progres = ProgressDialog(this)
@@ -410,7 +424,7 @@ class LoginActivity : AppCompatActivity() {
                             editor.putString("id", COD_PACIENTE)
                             editor.putString("nombres", nombres)
                             editor.putString("dni", NUM_HC)
-                            editor.putString("cumple", cumple)
+                            editor.putString("cumple", birthday)
                             editor.putString("logueo", "facebook")
                             editor.putString("correo", personEmail)
                             editor.commit()

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.PerfilFragment">
+
+    <LinearLayout
+        android:weightSum="4"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_persona"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+        </ImageView>
+        <TextView
+            android:id="@+id/tvnombrescompleto"
+            android:text="Andres perez"
+
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+        </TextView>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+    <LinearLayout
+        android:weightSum="4"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_documento"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+        </ImageView>
+        <TextView
+            android:id="@+id/tvnumerodocumento"
+            android:text="45713875"
+
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+        </TextView>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/gris" />
+    <LinearLayout
+        android:weightSum="4"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_mail"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+        </ImageView>
+        <TextView
+            android:id="@+id/tvcorreoelectronico"
+            android:text=""
+            android:hint="Correo"
+            android:textSize="18sp"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+        </TextView>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+    <LinearLayout
+        android:weightSum="4"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_birthey"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+        </ImageView>
+        <TextView
+            android:id="@+id/tvfechanacimiento"
+            android:text=""
+            android:textSize="18sp"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+        </TextView>
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+    <LinearLayout
+        android:weightSum="4"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imggenero"
+            android:src="@drawable/ic_birthey"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="25dp">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/tvtipogenero"
+            android:text="Genero Masculino"
+            android:textSize="18sp"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+        </TextView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+
+
+</LinearLayout>

@@ -5,21 +5,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.clinicalaluz.clinicaapp.Adapters.AdapterGridView
+import com.clinicalaluz.clinicaapp.clases.ClsSedes
+import com.clinicalaluz.clinicaapp.clases.Medic
 import com.clinicalaluz.clinicaapp.databinding.ActivitySearchBinding
 
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySearchBinding
-    private  lateinit var adaptergrid :AdapterGridView
+    private  lateinit var adaptergrid : AdapterGridView
     val list = ArrayList<Medic>()
 
     //private  var adapter2: SpinAdapter2? = null
@@ -139,8 +145,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun loadSedes(){
-        val listSedes = ArrayList<String>()
-        ///   listSedes.add("Seleccionar")
+
+
         val urlSpinner = "http://161.132.198.52:8080/app_laluz/pdoSelectSedes.php"
         val rqSp = Volley.newRequestQueue(this)
         val js = JsonArrayRequest(Request.Method.GET, urlSpinner, null,
@@ -148,14 +154,20 @@ class SearchActivity : AppCompatActivity() {
                 for(x in 0..response.length()-1) {
                     var nombre = response.getJSONObject(x).getString("NOM_SUCURSAL")
                     var code = response.getJSONObject(x).getString("COD_SUCURSAL")
-                    var sedes =  ClsSedes(code,nombre)
+                    var sedes =  ClsSedes(code,nombre,"","","","")
                    listaSedes2.add(sedes)
                 }
                 adapter2 = SpinAdapter2(this, R.layout.simple_spinner_dropdown_item, listaSedes2)
              //   val adapterSpecialty = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listaSedes2)
                 binding.spinnerSede.adapter = adapter2
             },
-            {
+            object : Response.ErrorListener {
+                override fun onErrorResponse(volleyError: VolleyError) {
+                    /// progres.dismiss()
+                 //   binding.simpleProgressBar.setVisibility(View.GONE);
+                    Log.e("errror",volleyError.toString() )
+                    Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                }
             })
         rqSp.add(js)
     }
@@ -193,7 +205,8 @@ class SearchActivity : AppCompatActivity() {
                     val cod = response.getJSONObject(x).getString("COD_AUXILIAR")
                     val name = response.getJSONObject(x).getString("DES_AUXILIAR")
                     val especialidad = response.getJSONObject(x).getString("DES_ESPECIALIDAD")
-                    list.add(Medic(cod, name, especialidad,img))
+                    val COD_MEDICO = response.getJSONObject(x).getString("COD_MEDICO")
+                    list.add(Medic(cod, name, especialidad,img,COD_MEDICO,""))
                 }
                 adaptergrid= AdapterGridView(this,list)
                 binding.listview.adapter =adaptergrid
@@ -216,7 +229,13 @@ class SearchActivity : AppCompatActivity() {
                       startActivity(intent)
                   } */
             },
-            {
+            object : Response.ErrorListener {
+                override fun onErrorResponse(volleyError: VolleyError) {
+                    /// progres.dismiss()
+                    binding.simpleProgressBar.setVisibility(View.GONE);
+                    Log.e("errror",volleyError.toString() )
+                    Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
+                }
             })
         rq.add(arr)
     }

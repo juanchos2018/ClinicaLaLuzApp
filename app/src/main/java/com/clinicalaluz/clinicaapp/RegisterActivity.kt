@@ -98,6 +98,7 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
             var progres = ProgressDialog(this)
             progres.setMessage("Cargando...")
             progres.show()
+
                 val url = "http://161.132.198.52:8080/app_laluz/pdoRegister.php?"
                 val stringRequest = object : StringRequest(
                     Request.Method.POST, url, Response.Listener { response ->

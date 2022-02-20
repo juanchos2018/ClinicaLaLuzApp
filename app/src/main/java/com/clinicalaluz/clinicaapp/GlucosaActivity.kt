@@ -69,7 +69,7 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     fun sendPost() {
 
         val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
-        var   dni = preferences.getString("dni", null)
+        var   dni = preferences.getString("NUM_DOC_IDENTIDAD", null)
         var   TipoSE = preferences.getString("logueo", null)
 
         if (TextUtils.isEmpty(binding.gluNew.text)){
@@ -97,12 +97,10 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
             }else{
                 val azucar = (binding.gluNew.text.toString()).toInt()
-                val url = "http://161.132.198.52:8080/app_laluz/pdoInserAzucar.php?"
-
-                val stringRequest = object : StringRequest(Request.Method.POST, url,
+                val peticion = "/pdoInserAzucar.php?"
+                val stringRequest = object : StringRequest(Request.Method.POST, getString(R.string.URL_BASE)+peticion,
                     Response.Listener { response ->
                         try {
-
                             if (response.toString().equals("Succes")){
                                 Toast.makeText(applicationContext ,"Registrado con existo" , Toast.LENGTH_SHORT).show()
                                 consultData()
@@ -120,7 +118,7 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                             Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
                         }
                     })
-                {
+                     {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         val params = HashMap<String, String>()
@@ -146,14 +144,14 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private fun consultData(){
         val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
-        var   dni = preferences.getString("dni", null)
+        var   dni = preferences.getString("NUM_DOC_IDENTIDAD", null)
         val xvalues = java.util.ArrayList<String>()
         val lineentry = java.util.ArrayList<Entry>()
-        val url = "http://161.132.198.52:8080/app_laluz/pdoSelectAzucar.php?doc=$dni"
+        val peticion = "/pdoSelectAzucar.php?doc=$dni"
         val rq = Volley.newRequestQueue(this)
-        val arr = JsonArrayRequest(Request.Method.GET, url, null,
+        val arr = JsonArrayRequest(Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
             { response ->
-                Log.e("response azuar ",response.toString())
+
                 for(x in 0..response.length()-1){
                     val fecha = response.getJSONObject(x).getString("FECHA")
                     xvalues.add(fecha)

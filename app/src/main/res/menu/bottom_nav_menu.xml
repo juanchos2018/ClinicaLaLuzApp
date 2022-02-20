@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<!--    <item-->
+<!--        android:id="@+id/navigation_home"-->
+<!--        android:icon="@drawable/ic_presion"-->
+<!--        android:title="Reserva" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/navigation_dashboard"-->
+<!--        android:icon="@drawable/ic_presion"-->
+<!--        android:title="Laboratorio" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/navigation_notifications"-->
+<!--        android:icon="@drawable/ic_time"-->
+<!--        android:title="Perfil" />-->
+    <item
+        android:id="@+id/reserva"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Reserva"  />
+    <item
+        android:id="@+id/laboratorio"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Laboratorio"  />
+    <item
+        android:id="@+id/perfil"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="Perfil"  />
+
+</menu>

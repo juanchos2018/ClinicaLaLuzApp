@@ -25,6 +25,7 @@ import java.util.*
 
 
 class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
     private lateinit var binding : ActivityPresionBinding
     private var day = 0
     private var month = 0
@@ -64,9 +65,9 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
        binding.newSistolica.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            if (  binding.newSistolica.length()==3){
-                  binding.newDiastolica.requestFocus()
-            }
+            if (binding.newSistolica.length()==3){
+                binding.newDiastolica.requestFocus()
+              }
         }
         override fun afterTextChanged(s: Editable) {
         }
@@ -94,10 +95,9 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             Toast.makeText(applicationContext, "LLenar el Diastolica", Toast.LENGTH_LONG).show()
         }else{
             val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
-            var   dni = preferences.getString("dni", null)
+            var   dni = preferences.getString("NUM_DOC_IDENTIDAD", null)
             var   TipoSE = preferences.getString("logueo", null)
             if (dni==null){
-
                 if (TipoSE=="gmail"){
                     val intent = Intent(this, RegisterGmailActivity::class.java)
                     startActivity(intent)
@@ -114,11 +114,11 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
                 val newSistolica = (binding.newSistolica.text.toString()).toInt()
                 val newDiastolica = (binding.newDiastolica.text.toString()).toInt()
-                var  newPulso =(binding.newPulso.text.toString()).toInt()
+                var newPulso =(binding.newPulso.text.toString()).toInt()
 
-                val url = "http://161.132.198.52:8080/app_laluz/pdoInsertPresion.php?"
+                val peticion = "/pdoInsertPresion.php?"
 
-                val stringRequest = object : StringRequest(Request.Method.POST, url,
+                val stringRequest = object : StringRequest(Request.Method.POST, getString(R.string.URL_BASE)+peticion,
                     Response.Listener { response ->
                         try {
                             if (response.toString().trim()=="Succes"){
@@ -139,7 +139,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                             Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
                         }
                     })
-                {
+                   {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         val params = HashMap<String, String>()
@@ -166,9 +166,9 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private fun consultData(){
         val xvalues = ArrayList<String>()
         val lineentry = ArrayList<Entry>()
-        val url = "http://161.132.198.52:8080/app_laluz/pdoSelectPresion.php?doc=$DniPaciente"
+        val peticion = "/pdoSelectPresion.php?doc=$DniPaciente"
         val rq = Volley.newRequestQueue(this)
-        val arr = JsonArrayRequest(Request.Method.GET, url, null,
+        val arr = JsonArrayRequest(Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
             { response ->
                 for(x in 0..response.length()-1){
                     val fecha = response.getJSONObject(x).getString("FECHA")

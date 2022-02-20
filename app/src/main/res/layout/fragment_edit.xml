@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="12dp"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.EditFragment">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:id="@+id/etnombres"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:background="@null"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+
+    <EditText
+        android:id="@+id/etapellidoP"
+        android:background="@null"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+    <EditText
+        android:id="@+id/etapellidoM"
+        android:background="@null"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+    <EditText
+        android:id="@+id/etcorreo"
+        android:background="@null"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:hint="Correo Electronico"
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+    <EditText
+        android:id="@+id/etNumerodocumento"
+        android:hint="Numero de Documento"
+        android:background="@null"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/gris" />
+
+
+    <LinearLayout
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvgenero"
+            android:text="Genero"
+            android:paddingLeft="15dp"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+        </TextView>
+
+        <RadioGroup
+            android:id="@+id/toggle"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/pink_out_line"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/search"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/toggle_widget_background"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="M"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:id="@+id/offer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_widget_background"
+                android:button="@null"
+                android:gravity="center"
+                android:text="F"
+                android:textColor="@color/white" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/gris" />
+
+    <EditText
+        android:id="@+id/etNumerotelefono"
+        android:background="@null"
+        android:paddingLeft="15dp"
+        android:text=""
+        android:hint="Numero de Telefono"
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </EditText>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/gris" />
+
+
+    <LinearLayout
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Fecha de Nacimiento"
+            android:paddingLeft="15dp"
+            android:layout_weight="1.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+        </TextView>
+
+
+        <Button
+            android:id="@+id/btnfechanacimiento"
+            android:layout_weight="1.5"
+            android:layout_width="0dp"
+            android:drawableLeft="@drawable/ic_calendar"
+            android:text="06-12/2021"
+            android:padding="10dp"
+            android:background="@drawable/btn_borde4"
+            android:layout_height="wrap_content">
+        </Button>
+
+    </LinearLayout>
+
+
+
+<Button
+    android:id="@+id/btneditar"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:text="Guardar"
+    android:textColor="@color/white"
+    android:background="@drawable/btn_borde_rojo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+</Button>
+
+</LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

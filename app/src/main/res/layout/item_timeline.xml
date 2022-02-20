@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content">
+
+<!--    <com.github.vipulasri.timelineview.TimelineView-->
+<!--        android:id="@+id/timeline"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        app:markerSize="15dp"-->
+<!--        app:lineWidth="2dp"-->
+<!--        app:startLineColor="@color/red"-->
+<!--        app:endLineColor="@color/red"-->
+<!--        app:lineOrientation="horizontal"-->
+<!--        />-->
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="fill_parent">-->
+
+            <ImageView
+                android:id="@+id/imgcircle"
+                android:gravity="left"
+                android:visibility="invisible"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ImageView>
+
+            <View
+                android:id="@+id/idview"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="0dp"
+
+
+                android:layout_width="50dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center"
+                android:background="@color/red" />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgcircle2"-->
+<!--                android:gravity="right"-->
+<!--                android:layout_gravity="right"-->
+<!--                android:layout_alignLeft="@+id/idview"-->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:visibility="invisible"-->
+<!--                android:src="@drawable/ic_circle"-->
+<!--                android:layout_marginLeft="1dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+<!--            </ImageView>-->
+
+<!--            <LinearLayout-->
+<!--                android:background="@drawable/ic_circle"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--            </LinearLayout>-->
+<!--                    <ImageView-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:src="@drawable/ic_circle"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content">-->
+<!--                    </ImageView>-->
+<!--        </RelativeLayout>-->
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvhora2"
+        android:text="d"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+
+</LinearLayout>

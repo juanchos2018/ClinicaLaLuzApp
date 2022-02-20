@@ -3,6 +3,8 @@
     package="com.clinicalaluz.clinicaapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -12,10 +14,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MenuNuevoActivity">
+        <activity android:name=".MisCitasActivity"></activity>
+        <activity android:name=".PaymentActivity"></activity>
+        <activity android:name=".MiPerfilActivity" />
+        <activity
+            android:name=".SubMenuActivity"
+            android:label="@string/title_activity_sub_menu" />
+        <activity android:name=".PrincipalActivity" />
+        <activity android:name=".AutochequoActivity" />
+        <activity android:name=".UbicacionActivity" />
+        <activity android:name=".InicioSesionActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- inicio principal -->
 
         </activity>
+        <activity android:name=".PagarActivity" />
+        <activity android:name=".DoctorDetalleActivity" />
+        <activity android:name=".DoctoresActivity" />
+        <activity android:name=".EspecialidadActivity" />
+        <activity android:name=".SedesActivity" />
+        <activity android:name=".ServiciosActivity" />
+        <activity android:name=".MenuNuevoActivity" />
         <activity android:name=".LogutActivity" />
         <activity android:name=".RegisterFacebookActivity" />
         <activity android:name=".RegisterGmailActivity" />
@@ -29,13 +53,9 @@
         <activity android:name=".DetailActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".MainActivity">
-<!-- aqui estaba el main-->
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!-- aqui estaba el main -->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data

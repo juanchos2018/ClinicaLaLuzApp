@@ -9,6 +9,9 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.clinicalaluz.clinicaapp.Adapters.HorarioAdapter
+import com.clinicalaluz.clinicaapp.clases.Horario
+import com.clinicalaluz.clinicaapp.clases.Medic
 import com.clinicalaluz.clinicaapp.databinding.ActivityMedicoDetalleBinding
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.squareup.picasso.Picasso
@@ -84,7 +87,7 @@ class MedicoDetalleActivity : AppCompatActivity() {
                     val dateH = response.getJSONObject(x).getString("FECHA")
                     val startH = response.getJSONObject(x).getString("DES_HORA_I")
                     val endH = response.getJSONObject(x).getString("DES_HORA_F")
-                    list.add(Horario(dayH, dateH, startH, endH))
+                   // list.add(Horario(dayH, dateH, startH, endH))
                 }
                 binding.detailListview.adapter = HorarioAdapter(this, list)
             },

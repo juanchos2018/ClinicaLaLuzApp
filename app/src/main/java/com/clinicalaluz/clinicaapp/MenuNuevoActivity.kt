@@ -105,6 +105,8 @@ class MenuNuevoActivity : AppCompatActivity() {
         }
 
         else if (TipoSesion == "facebook"){
+            Toast.makeText(applicationContext, "facebook  session", Toast.LENGTH_LONG).show()
+
             if (AccessToken.getCurrentAccessToken() == null) {
                 goLoginScreen()
             } else {
@@ -117,7 +119,6 @@ class MenuNuevoActivity : AppCompatActivity() {
                 }else{
                     DNI_PACIENTE=dniuser
                 }
-
                 val handler = Handler()
                 handler.postDelayed({
                     var perfil = Profile.getCurrentProfile()
@@ -202,6 +203,12 @@ class MenuNuevoActivity : AppCompatActivity() {
             val intent = Intent(this@MenuNuevoActivity, SearchActivity::class.java)
             startActivity(intent)
         }
+
+        binding.imgperfil.setOnClickListener {
+            val intent = Intent(this@MenuNuevoActivity, PerfilActivity::class.java)
+            intent.putExtra("TipoSesion",TipoSE)
+            startActivity(intent)
+        }
     }
 
 
@@ -249,7 +256,6 @@ class MenuNuevoActivity : AppCompatActivity() {
             Request.Method.GET, url,null,
             { response: JSONObject ->
                 val json = response.optJSONArray("usuario")
-                //  progres.dismiss()
                 var jsonObject: JSONObject? = null
                 try {
                     jsonObject = json.getJSONObject(0)
@@ -277,7 +283,6 @@ class MenuNuevoActivity : AppCompatActivity() {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(volleyError: VolleyError) {
-                    // progres.dismiss()
                     Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
                 }
             })
