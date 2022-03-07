@@ -13,7 +13,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@color/red"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -86,7 +85,7 @@
         </TextView>
 
     <LinearLayout
-        android:padding="20dp"
+        android:padding="15dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -123,7 +122,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
-
             </androidx.cardview.widget.CardView>
             <LinearLayout
                 android:id="@+id/lienarmensaje"

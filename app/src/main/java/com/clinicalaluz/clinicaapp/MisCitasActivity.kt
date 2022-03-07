@@ -25,7 +25,7 @@ class MisCitasActivity : AppCompatActivity() {
     val listaMisCitas = ArrayList<ClsMisCitas>()
     private  lateinit var  adapter: AdapterMisCitas
 
-
+    var  DES_AUXILIAR_MI=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ///etContentView(R.layout.activity_mis_citas)
@@ -50,23 +50,20 @@ class MisCitasActivity : AppCompatActivity() {
     private fun salir() {
         finish()
     }
-
     override fun onStart() {
         super.onStart()
        val preferences = getSharedPreferences("datosuser", Context.MODE_PRIVATE)
-       var  DES_AUXILIAR = preferences.getString("DES_AUXILIAR", null).toString()
+       DES_AUXILIAR_MI = preferences.getString("DES_AUXILIAR", null).toString()
        var  COD_AUXILIAR = preferences.getString("COD_AUXILIAR", null).toString()
        var  NUM_DOC_IDENTIDAD = preferences.getString("NUM_DOC_IDENTIDAD", null).toString()
        var  COD_PACIENTE= preferences.getString("COD_PACIENTE", null).toString()
        var  COD_CLIENTE = preferences.getString("COD_CLIENTE", null).toString()
-        showMisCitas(COD_PACIENTE)
+       showMisCitas(NUM_DOC_IDENTIDAD)
     }
 
-
-    fun showMisCitas(cod_paciente:String){
+    fun showMisCitas(NUM_DOC_IDENTIDAD:String){
         listaMisCitas.clear()
-        var peticion = "/pdoMisCitas.php?cod_paciente=$cod_paciente"
-
+        var peticion = "/pdoMisCitas.php?nuc_identidad=$NUM_DOC_IDENTIDAD"
         val rq = Volley.newRequestQueue(this)
         val arr = JsonArrayRequest(
             Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
@@ -76,30 +73,28 @@ class MisCitasActivity : AppCompatActivity() {
                     val COD_MEDICO = response.getJSONObject(x).getString("COD_MEDICO")
                     val DES_AUXILIAR = response.getJSONObject(x).getString("DES_AUXILIAR")
                     val COD_ESPECIALIDAD = response.getJSONObject(x).getString("COD_ESPECIALIDAD")
-
+                    val COD_SUCURSAL= response.getJSONObject(x).getString("COD_ESPECIALIDAD")
+                    val DES_HORA = response.getJSONObject(x).getString("DES_HORA")
                     val DES_ESPECIALIDAD = response.getJSONObject(x).getString("DES_ESPECIALIDAD")
                     val FEC_INSERCION = response.getJSONObject(x).getString("FEC_INSERCION")
                     val FEC_ATENCION = response.getJSONObject(x).getString("FEC_ATENCION")
-
-                    listaMisCitas.add(ClsMisCitas(COD_ATENCION,COD_MEDICO,DES_AUXILIAR,COD_ESPECIALIDAD,DES_ESPECIALIDAD,FEC_INSERCION,FEC_ATENCION ))
+                    val NOM_SUCURSAL = response.getJSONObject(x).getString("NOM_SUCURSAL")
+                    listaMisCitas.add(ClsMisCitas(COD_ATENCION,COD_MEDICO,DES_AUXILIAR,COD_ESPECIALIDAD,COD_SUCURSAL,DES_HORA,DES_ESPECIALIDAD,FEC_INSERCION,FEC_ATENCION,NOM_SUCURSAL ))
                 }
                 adapter = AdapterMisCitas(this,listaMisCitas)
+                adapter.DES_AUXILIAR=DES_AUXILIAR_MI
+
                 binding.recyclermicictas.adapter=adapter
                 adapter.setOnClickListener { v: View? ->
 
                     val bottomSheetDialog = newInstance()
-                    bottomSheetDialog?.show(supportFragmentManager,"dfdfd")
-                   // bottomSheetDialog.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
-
+                    bottomSheetDialog?.nombnredoctor=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).DES_AUXILIAR
+                    bottomSheetDialog?.nombreespecialidad=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).DES_ESPECIALIDAD
+                    bottomSheetDialog?.show(supportFragmentManager,"bottonshelld")
                 }
-
-
-                ///    binding.listview.adapter = Adapter(this, list)
-
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(volleyError: VolleyError) {
-
                    // binding.simpleProgressBar2.setVisibility(View.GONE)
                     Log.e("errror",volleyError.toString() )
                     Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()

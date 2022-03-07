@@ -12,49 +12,91 @@
         android:layout_height="match_parent"
         tools:context=".PresionActivity"
         android:background="@drawable/background_login"
-        android:padding="15dp">
+       >
 
-        <RelativeLayout
-            android:id="@+id/preLayoutTitle"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:titleTextColor="@color/white"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
             <ImageView
                 android:id="@+id/preReturnMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_chevron_left_black_white"
-                android:layout_centerVertical="true"/>
-            <TextView
-                android:id="@+id/preTitleNew"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_left" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/preTitleNew"
-                android:layout_marginStart="17dp"
-                android:layout_toEndOf="@+id/preReturnMenu"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                android:textColor="@color/white"/>
-            <Button
-                android:id="@+id/savePresion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/savePresion"
-                android:background="@drawable/button_save_presion"
-                android:layout_centerVertical="true"
-                android:textColor="@color/red"
-                android:layout_alignParentEnd="true"/>
+                android:gravity="center"
+                android:orientation="vertical">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_marginLeft="-17dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Presion"
+                    android:textColor="@color/white"
+                    android:textSize="20sp">
+                </TextView>
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/preLayoutTitle"-->
+<!--            android:padding="15dp"-->
+<!--            android:layout_below="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/preReturnMenu"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_chevron_left_black_white"-->
+<!--                android:layout_centerVertical="true"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/preTitleNew"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/preTitleNew"-->
+<!--                android:layout_marginStart="17dp"-->
+<!--                android:layout_toEndOf="@+id/preReturnMenu"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textColor="@color/white"/>-->
+<!--            <Button-->
+<!--                android:id="@+id/savePresion"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/savePresion"-->
+<!--                android:background="@drawable/button_save_presion"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:textColor="@color/red"-->
+<!--                android:layout_alignParentEnd="true"/>-->
+
+
+<!--        </RelativeLayout>-->
 
         <RelativeLayout
             android:id="@+id/preLayoutInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_register"
-            android:layout_below="@+id/preLayoutTitle"
-            android:layout_marginTop="20dp"
-            android:padding="30dp">
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="15dp">
             <TextView
                 android:id="@+id/textPreDate"
                 android:layout_width="wrap_content"
@@ -62,18 +104,28 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/textPreDate"
                 android:textColor="@color/presionGris"/>
-            <TextView
+
+
+            <Button
                 android:id="@+id/preDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:alpha="0.7"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_especial"
                 android:layout_below="@+id/textPreDate"
+                android:layout_width="wrap_content"
                 android:drawableEnd="@drawable/ic_today_black_24dp"
-                tools:text="05 jul. 2021 - 11:12 a.m."
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
+                android:layout_height="wrap_content">
+            </Button>
+<!--   android:drawableStart="@drawable/ic_pdf"-->
+            <Button
+                android:id="@+id/btndialogo"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_width="50dp"
+                android:background="@drawable/btn_borde5"
+                android:layout_height="wrap_content">
+            </Button>
+
             <RelativeLayout
                 android:id="@+id/layoutSistólica"
                 android:layout_width="wrap_content"
@@ -191,6 +243,18 @@
                     android:textColor="@color/black"
                     android:background="@drawable/rounded_edit_text"/>
             </RelativeLayout>
+
+            <Button
+                android:id="@+id/savePresion"
+                android:layout_below="@+id/layoutDiastólica"
+                android:text="guardar"
+                android:layout_marginTop="10dp"
+                android:background="@color/red"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </Button>
         </RelativeLayout>
 
         <RelativeLayout
@@ -200,6 +264,9 @@
             android:background="@drawable/background_register"
             android:layout_below="@+id/preLayoutInput"
             android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="20dp">
 
             <com.github.mikephil.charting.charts.LineChart

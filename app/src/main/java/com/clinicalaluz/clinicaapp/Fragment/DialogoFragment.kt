@@ -18,6 +18,8 @@ class DialogoFragment : BottomSheetDialogFragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    var  nombnredoctor="aaa"
+    var  nombreespecialidad=""
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,11 @@ class DialogoFragment : BottomSheetDialogFragment() {
     override fun setupDialog(dialog: Dialog, style: Int) {
         val contentView = View.inflate(context, R.layout.fragment_dialogo, null)
 
+        var tvnamedoctor :TextView =contentView.findViewById(R.id.tvnomvredoctor4)
+        var tvespecialidad:TextView=contentView.findViewById(R.id.tvespecialidad4)
 
+        tvnamedoctor.text=nombnredoctor
+        tvespecialidad.text=nombreespecialidad
 
         dialog.setContentView(contentView)
         (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))

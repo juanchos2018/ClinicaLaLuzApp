@@ -67,7 +67,13 @@ class DoctoresActivity : AppCompatActivity() {
         binding.calendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, day ->
             var mes = month + 1
             FECHA = "$day/$mes/$year"
-            FECHABD= String.format("$year-${month+1}-$day")
+           // FECHABD= String.format("$year-${month+1}-$day")
+            var leng = mes.toString().length
+            if (leng==1){
+                FECHABD=String.format("$year-0${month+1}-$day")
+            }else{
+                FECHABD=String.format("$year-${month+1}-$day")
+            }
             FECHA2 = "$year-$mes-$day"
 
             val inputDateStr = FECHA2
@@ -113,7 +119,12 @@ class DoctoresActivity : AppCompatActivity() {
         val mess = nombremes.format(date)
         FechaActual =diactual+" "+ dd +" de "+ mess
         binding.tvnombredia.text = FechaActual
-        FECHABD=String.format("$yyyy-${MM+1}-$dd")
+        var leng = MM.toString().length
+        if (leng==1){
+            FECHABD=String.format("$yyyy-0${MM+1}-$dd")
+        }else{
+            FECHABD=String.format("$yyyy-${MM+1}-$dd")
+        }
 
     }
     private fun salir() {

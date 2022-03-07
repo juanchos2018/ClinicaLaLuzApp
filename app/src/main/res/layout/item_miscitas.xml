@@ -42,7 +42,7 @@
                 <TextView
                     android:id="@+id/tvespecialidad"
                     android:textColor="@color/white"
-                    android:text="Cardiologia"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 </TextView>
@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_marginTop="16dp"
                     android:id="@+id/tvmedico"
-                    android:text="doctor nongre"
+                    android:text=""
                     android:textColor="@color/white"
                     android:drawablePadding="3dp"
                     android:drawableLeft="@drawable/ic_chevron_left_black_white"
@@ -59,7 +59,7 @@
                 </TextView>
                 <TextView
                     android:id="@+id/tvminombre"
-                    android:text="minonmbre  "
+                    android:text=""
                     android:textColor="@color/white"
                     android:drawablePadding="3dp"
                     android:drawableLeft="@drawable/ic_usuario"
@@ -75,15 +75,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 </TextView>
-                <TextView
-                    android:id="@+id/tvconsultorio"
-                    android:text="cobnsultrio  "
-                    android:textColor="@color/white"
-                    android:drawableLeft="@drawable/ic_chevron_left_black_white"
-                    android:layout_width="wrap_content"
-                    android:drawablePadding="3dp"
-                    android:layout_height="wrap_content">
-                </TextView>
+<!--                <TextView-->
+<!--                    android:id="@+id/tvconsultorio"-->
+<!--                    android:text="cobnsultrio  "-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:drawableLeft="@drawable/ic_chevron_left_black_white"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:drawablePadding="3dp"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                </TextView>-->
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -110,6 +110,7 @@
                     android:layout_height="wrap_content">
                 </TextView>
                 <TextView
+                    android:id="@+id/tvhoracita2"
                     android:text="10:40"
                     android:textSize="17sp"
                     android:textColor="@color/white"

@@ -146,15 +146,25 @@
         android:drawableRight="@drawable/ic_search"
         android:maxLength="35"/>
 
-    <GridView
-        android:id="@+id/gridespecialidad"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:numColumns="3"
-        android:layout_marginTop="15dp"
-        android:footerDividersEnabled="false"
-        android:verticalSpacing="1dp"
-        android:horizontalSpacing="1dp"/>
+<!--    <GridView-->
+<!--        android:id="@+id/gridespecialidad"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="fill_parent"-->
+<!--        android:numColumns="3"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:footerDividersEnabled="false"-->
+<!--        android:verticalSpacing="1dp"-->
+<!--        android:horizontalSpacing="1dp"/>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerespecialiad"
+        android:layout_marginTop="8dp"
+        android:padding="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
 
 
 </LinearLayout>

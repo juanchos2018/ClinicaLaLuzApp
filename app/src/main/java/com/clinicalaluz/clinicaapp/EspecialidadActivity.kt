@@ -11,10 +11,12 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.clinicalaluz.clinicaapp.Adapters.AdapterGridEspecialidad
+import com.clinicalaluz.clinicaapp.Adapters.AdapterGriedViewAlter
 import com.clinicalaluz.clinicaapp.clases.ClsEspecialidad
 import com.clinicalaluz.clinicaapp.databinding.ActivityEspecialidadBinding
 
@@ -25,6 +27,8 @@ class EspecialidadActivity : AppCompatActivity() {
 
     val listEpecialidad = ArrayList<ClsEspecialidad>()
     private  lateinit var adapterespecialidad : AdapterGridEspecialidad
+    private  lateinit var adapterespecialidad2 : AdapterGriedViewAlter
+
     var COD_SUCURSAL=""
     var phone=""
     var NOM_SUCURSAL=""
@@ -37,6 +41,11 @@ class EspecialidadActivity : AppCompatActivity() {
         COD_SUCURSAL = intent.getSerializableExtra("COD_SUCURSAL").toString()
         phone = intent.getSerializableExtra("phone").toString()
         NOM_SUCURSAL=intent.getSerializableExtra("NOM_SUCURSAL").toString()
+
+
+        val gridLayoutManager = GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
+        binding.recyclerespecialiad.layoutManager = gridLayoutManager
+
 
         binding.imageViewplaces2.setOnClickListener {
             salir()
@@ -65,7 +74,7 @@ class EspecialidadActivity : AppCompatActivity() {
             if (item.DES_ESPECIALIDAD .toLowerCase().contains(texto)) {
                 filtradatos.add(item)
             }
-            adapterespecialidad.filtrar(filtradatos)
+            adapterespecialidad2.filtrar(filtradatos)
         }
     }
     fun callPhone(number:String){
@@ -97,19 +106,22 @@ class EspecialidadActivity : AppCompatActivity() {
                     val IMAGEN = response.getJSONObject(x).getString("IMAGEN")
                     listEpecialidad.add(ClsEspecialidad(DES_ESPECIALIDAD,getString(R.string.URL_BASE)+IMAGEN,COD_ESPECIALIDAD,PRECIO_V))
                 }
-                adapterespecialidad= AdapterGridEspecialidad(this,listEpecialidad)
-                binding.gridespecialidad.adapter =adapterespecialidad
+                adapterespecialidad2= AdapterGriedViewAlter(this,listEpecialidad)
+                adapterespecialidad2.NOM_SUCURSAL=NOM_SUCURSAL
+                adapterespecialidad2.COD_SUCURSAL=idbd
+                binding.recyclerespecialiad.adapter =adapterespecialidad2
 
-                binding.gridespecialidad.setOnItemClickListener { parent, view, position, id ->
-                ///    Toast.makeText(applicationContext, "id : ,"+idbd, Toast.LENGTH_LONG).show()
-                    val intent = Intent(this, DoctoresActivity::class.java)
-                    intent.putExtra("especialidad", listEpecialidad[position].DES_ESPECIALIDAD)
-                    intent.putExtra("COD_ESPECIALIDAD", listEpecialidad[position].COD_ESPECIALIDAD)
-                    intent.putExtra("PRECIO_V", listEpecialidad[position].PRECIO_V)
-                    intent.putExtra("NOM_SUCURSAL", NOM_SUCURSAL)
-                    intent.putExtra("COD_SUCURSAL", idbd)
-                    startActivity(intent)
-                }
+               // adapterespecialidad= AdapterGridEspecialidad(this,listEpecialidad)
+//                binding.gridespecialidad.adapter =adapterespecialidad//
+//                binding.gridespecialidad.setOnItemClickListener { parent, view, position, id ->
+//                    val intent = Intent(this, DoctoresActivity::class.java)
+//                    intent.putExtra("especialidad", listEpecialidad[position].DES_ESPECIALIDAD)
+//                    intent.putExtra("COD_ESPECIALIDAD", listEpecialidad[position].COD_ESPECIALIDAD)
+//                    intent.putExtra("PRECIO_V", listEpecialidad[position].PRECIO_V)
+//                    intent.putExtra("NOM_SUCURSAL", NOM_SUCURSAL)
+//                    intent.putExtra("COD_SUCURSAL", idbd)
+//                    startActivity(intent)
+//                }
             },
             {
             })

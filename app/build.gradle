@@ -87,7 +87,11 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.github.vipulasri:timelineview:1.1.5'
 
-   // implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    //implementation 'com.itextpdf:itextg:5.0.6'
+    //    compile 'com.itextpdf:itextpdf:5.0.6'
+    compile 'com.itextpdf:itextpdf:5.5.13.1'
+
+    // implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }

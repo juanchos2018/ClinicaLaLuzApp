@@ -69,12 +69,12 @@ class DoctorDetalleActivity : AppCompatActivity() {
         DES_AUXILIAR = intent.getSerializableExtra("DES_AUXILIAR").toString()
         COD_MEDICO = intent.getSerializableExtra("COD_MEDICO").toString()
 
+        //Toast.makeText(applicationContext,"hora :"+COD_ESPECIALIDAD +"- "+COD_MEDICO+" "+FECHABD, Toast.LENGTH_LONG).show()
         layoutManager = StaggeredGridLayoutManager(5, StaggeredGridLayoutManager.VERTICAL)
 
         val linearLayoutManager2 = LinearLayoutManager(this)
         linearLayoutManager2.reverseLayout = true
         linearLayoutManager2.stackFromEnd = true
-
         binding.recyclerorario.layoutManager =layoutManager
         binding.recyclertimeline.layoutManager=  LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
@@ -90,7 +90,7 @@ class DoctorDetalleActivity : AppCompatActivity() {
         binding.imageViewplaces4.setOnClickListener {
             salir()
         }
-        //tvfechacita2
+
         binding.tvespecialidad3.text=ESPECIALIDAD
         binding.tvfechacita2.text=FECHA
         binding.tvenombreespecialidad.text=ESPECIALIDAD
@@ -112,8 +112,9 @@ class DoctorDetalleActivity : AppCompatActivity() {
 //        }
 //        )
         ListarHorario()
-        ListarHorario2()
 
+        //esto es para el timelinea
+        //ListarHorario2()
         binding.rbdconsulta.isChecked=true
 
 
@@ -139,22 +140,25 @@ class DoctorDetalleActivity : AppCompatActivity() {
         }
     }
     private fun goactivity() {
-
-        val intent = Intent(this, PagarActivity::class.java)
-        intent.putExtra("IDE_HORA", IDE_HORA)
-        intent.putExtra("DES_HORA", DES_HORA)
-        intent.putExtra("FECHA", FECHA)
-        intent.putExtra("FECHABD", FECHABD)
-        intent.putExtra("NOM_SUCURSAL", NOM_SUCURSAL)
-        intent.putExtra("COD_SUCURSAL", COD_SUCURSAL)
-        intent.putExtra("ESPECIALIDAD", ESPECIALIDAD)
-        intent.putExtra("COD_ESPECIALIDAD", COD_ESPECIALIDAD)
-        intent.putExtra("PRECIO_V", PRECIO_V)
-        intent.putExtra("DES_AUXILIAR", DES_AUXILIAR)
-        intent.putExtra("COD_MEDICO", COD_MEDICO)
-        intent.putExtra("COD_COBERTURA", COD_COBERTURA)
-
-        startActivity(intent)
+        if (IDE_HORA=="" || DES_HORA =="" ){
+            simpleAlertFail("Vuelva a seleccionar la hora ","seleccione")
+        }else{
+            val intent = Intent(this, PagarActivity::class.java)
+            intent.putExtra("IDE_HORA", IDE_HORA)
+            intent.putExtra("DES_HORA", DES_HORA)
+            intent.putExtra("FECHA", FECHA)
+            intent.putExtra("FECHABD", FECHABD)
+            intent.putExtra("NOM_SUCURSAL", NOM_SUCURSAL)
+            intent.putExtra("COD_SUCURSAL", COD_SUCURSAL)
+            intent.putExtra("ESPECIALIDAD", ESPECIALIDAD)
+            intent.putExtra("COD_ESPECIALIDAD", COD_ESPECIALIDAD)
+            intent.putExtra("PRECIO_V", PRECIO_V)
+            intent.putExtra("DES_AUXILIAR", DES_AUXILIAR)
+            intent.putExtra("COD_MEDICO", COD_MEDICO)
+            intent.putExtra("COD_COBERTURA", COD_COBERTURA)
+            finish()
+            startActivity(intent)
+        }
     }
 
     private  fun  ListTimeline(){
@@ -171,20 +175,15 @@ class DoctorDetalleActivity : AppCompatActivity() {
         val js = JsonArrayRequest(
             Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
             { response ->
-
                 for(x in 0..response.length()-1) {
                     var COD_DOCUMENTO = response.getJSONObject(x).getString("COD_DOCUMENTO")
                     if (COD_DOCUMENTO=="L"){
-
                         var IDE_HORA = response.getJSONObject(x).getString("IDE_HORA")
                         var DES_HORA = response.getJSONObject(x).getString("DES_HORA")
-                        //   Log.e("COD_DOCUMENTO",COD_DOCUMENTO )
                         //  var code = response.getJSONObject(x).getString("COD_SUCURSAL")
-                        var  horass ="12:00"
                         var horario =  Horario(COD_DOCUMENTO,IDE_HORA,DES_HORA,"","")
                         listHorario.add(horario)
                     }
-
                 }
                 interfaceHorario = object : InterfaceHorario {
                     override fun onCallback(value: Horario?) {
@@ -208,7 +207,7 @@ class DoctorDetalleActivity : AppCompatActivity() {
                   //  binding.lienarmensaje.setVisibility(View.VISIBLE);
                 }
 //                var studlistGrouped: Map<String, List<Horario>> =
-//                   listHorario.stream().collect(Collectors.groupingBy { w -> w.DES_HORA.substring(0,2) })
+//                listHorario.stream().collect(Collectors.groupingBy { w -> w.DES_HORA.substring(0,2) })
 //                Log.e ("lista", studlistGrouped.toString())
 
                 binding.recyclerorario.adapter=adapterhoraio
@@ -231,11 +230,20 @@ class DoctorDetalleActivity : AppCompatActivity() {
         //Alerter.create(this@MainActivity).setTitle("Alert Title").setText("Alert text...").show()
         // .setIconSize(12)
         Alerter.create(this@DoctorDetalleActivity)
-            .setTitle("Fecha Seleccionada")
+            .setTitle("Hora Seleccionada")
             .setText(fecha)
             .setIcon(R.drawable.ic_check)
             .setBackgroundColorRes(R.color.verde)
             .setIconColorFilter(0) // Optional - Removes white tint
+            .show()
+    }
+    fun simpleAlertFail(message:String,title:String) {
+        Alerter.create(this@DoctorDetalleActivity)
+            .setTitle(title)
+            .setText(message)
+            .setIcon(R.drawable.ic_warning)
+            .setBackgroundColorRes(R.color.gris)
+            .setIconColorFilter(0)
             .show()
     }
     fun  ListarHorario2(){

@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     tools:context=".Fragment.DialogoFragment">
 
     <androidx.cardview.widget.CardView
@@ -46,17 +45,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-
-                        android:text="hosdasdf"
+                        android:text=""
                         android:textStyle="bold"></TextView>
 
                     <TextView
                         android:id="@+id/tvespecialidad4"
+                        android:textSize="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="hosdasdf"
+                        android:text=""
                         ></TextView>
                 </LinearLayout>
 
@@ -91,14 +90,37 @@
                     android:background="@drawable/round_edit_text2"
                     android:layout_width="match_parent"
                     android:textColor="@color/red"
-                    android:padding="15dp"
+                    android:padding="18dp"
+                    android:drawableLeft="@drawable/ic_calendar"
                     android:gravity="left|center"
                     android:drawablePadding="8dp"
                     android:layout_height="wrap_content">
                 </Button>
 
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:text="Pagar"
+                    android:background="@drawable/round_edit_text2"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/red"
+                    android:padding="18dp"
+                    android:drawableLeft="@drawable/ic_payment"
+                    android:gravity="left|center"
+                    android:drawablePadding="8dp"
+                    android:layout_height="wrap_content">
+                </Button>
 
-
+<!--                <TextView-->
+<!--                    android:text="Anular Cita"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:textColor="@color/red"-->
+<!--                    android:layout_gravity="right"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:gravity="center"-->
+<!--                    android:drawableLeft="@drawable/ic_anular"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                </TextView>-->
 
             </LinearLayout>
         </RelativeLayout>

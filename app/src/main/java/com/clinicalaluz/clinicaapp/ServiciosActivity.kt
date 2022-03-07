@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import com.clinicalaluz.clinicaapp.databinding.ActivityServiciosBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.tapadoo.alerter.Alerter
 
 
 class ServiciosActivity : AppCompatActivity() {
@@ -45,7 +46,9 @@ class ServiciosActivity : AppCompatActivity() {
         binding.imageViewplaces5.setOnClickListener {
             salir()
         }
-
+        binding.cardteleconsulta.setOnClickListener {
+            //simpleAlertFail("fadfdsfdsfds","dfdfdddddd")
+        }
 
 //        binding.cardpruepresion.setOnClickListener {
 //            val intent = Intent(this, AutochequoActivity::class.java)
@@ -63,6 +66,19 @@ class ServiciosActivity : AppCompatActivity() {
 //        return true
 //    }
 //
+
+    fun simpleAlertFail(message:String,title:String) {
+
+        Alerter.create(this@ServiciosActivity)
+            .setTitle(title)
+            .setText(message)
+            .setIcon(R.drawable.ic_warning)
+            .setBackgroundColorRes(R.color.gris)
+            .setIconColorFilter(0) // Optional - Removes white tint
+            .show()
+    }
+
+
     fun showPopup(v: View) {
         val popup = PopupMenu(this, v)
         val inflater: MenuInflater = popup.menuInflater

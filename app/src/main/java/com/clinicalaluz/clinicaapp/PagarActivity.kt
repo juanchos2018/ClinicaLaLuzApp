@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.clinicalaluz.clinicaapp.databinding.ActivityPagarBinding
+import com.tapadoo.alerter.Alerter
 import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -72,7 +73,7 @@ class PagarActivity : AppCompatActivity() {
         binding.tvnombredoctor3.text=DES_AUXILIAR
         binding.tvsede4.text=NOM_SUCURSAL
         binding.tvespecialidad4.text=ESPECIALIDAD
-
+        simpleAlert("Se genero su cita ","lo puede ver en Mis Citas")
         binding.imageViewplaces.setOnClickListener {
             salir()
         }
@@ -146,6 +147,16 @@ class PagarActivity : AppCompatActivity() {
                     }
                 })
             rq.add(jst)
+    }
+
+    fun simpleAlert(title:String,subtitile:String) {
+        Alerter.create(this@PagarActivity)
+            .setTitle(title)
+            .setText(subtitile)
+            .setIcon(R.drawable.ic_check)
+            .setBackgroundColorRes(R.color.verde)
+            .setIconColorFilter(0) // Optional - Removes white tint
+            .show()
     }
 
     private fun payment() {
