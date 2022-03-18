@@ -26,11 +26,7 @@ private const val ARG_PARAM2 = "param2"
 
 class PerfilFragment : Fragment() {
 
-
-
     private lateinit var binding: FragmentPerfilBinding
-
-
     private var param1: String? = null
     private var param2: String? = null
 
@@ -46,7 +42,6 @@ class PerfilFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
          ): View? {
-
 
         //inflater.inflate(R.layout.fragment_perfil, container, false)
         binding = FragmentPerfilBinding.inflate(inflater, container, false)
@@ -72,10 +67,10 @@ class PerfilFragment : Fragment() {
     }
 
     private  fun DatosUser(dni:String){
-        val url = "http://161.132.198.52:8080/app_laluz/pdoSelectDni.php?doc=$dni"
+        var peticion="/Controllers/UsuarioController.php?condicion=info&doc=$dni"
         val rq = Volley.newRequestQueue(context)
         val jst = JsonObjectRequest(
-            Request.Method.GET, url,null,
+            Request.Method.GET, getString(R.string.URL_BASE)+peticion,null,
             { response: JSONObject ->
                 val json = response.optJSONArray("usuario")
                 var jsonObject: JSONObject? = null
@@ -93,7 +88,6 @@ class PerfilFragment : Fragment() {
                         var  FEC_NACIMIENTO =jsonObject.optString("FEC_NACIMIENTO")
                         var  NUM_EMAIL = jsonObject.optString("NUM_EMAIL")
 
-
                         binding.tvnombrescompleto.text =nombres+" "+apellidoPa +" "+apellidoMa
                         binding.tvnumerodocumento.text=doc
                         binding.tvfechanacimiento.text=FEC_NACIMIENTO
@@ -101,16 +95,13 @@ class PerfilFragment : Fragment() {
 
                          if (genero=="FE"){
                             binding.imggenero.setImageResource(R.drawable.famale)
-                            // binding.imggenero.
                              binding.tvtipogenero.text="Género Femenino"
                         }else if (genero=="MA"){
                             binding.imggenero.setImageResource(R.drawable.malepn)
                              binding.tvtipogenero.text="Género Masculino"
                         }else{
-                           // binding.imgsexo.setImageResource(R.drawable.ic_null)
                              binding.tvtipogenero.text="Género Nulo"
                          }
-
                     }
                 } catch (e: JSONException) {
                     e.printStackTrace()

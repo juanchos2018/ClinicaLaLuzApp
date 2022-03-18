@@ -8,7 +8,7 @@
     tools:context=".Fragment.DialogoFragment">
 
     <androidx.cardview.widget.CardView
-        app:cardCornerRadius="5dp"
+       app:cardCornerRadius="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
@@ -17,8 +17,6 @@
             android:layout_margin="8dp"
             android:background="@color/colorBackground"
             android:orientation="vertical">
-
-
             <LinearLayout
                 android:id="@+id/la1"
                 android:orientation="horizontal"
@@ -26,11 +24,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-
                     android:src="@drawable/ic_especialidad"
                     android:id="@+id/imgprevia"
-                    android:layout_width="21dp"
-                    android:layout_height="21dp">
+                    android:layout_width="17dp"
+                    android:layout_height="17dp">
 
                 </ImageView>
 
@@ -57,9 +54,14 @@
                         android:layout_marginRight="10dp"
                         android:text=""
                         ></TextView>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@color/gris" />
                 </LinearLayout>
-
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_below="@id/la1"
@@ -84,31 +86,89 @@
 
 <!--                </TextView>-->
 
+
+
+
                 <Button
+                    android:id="@+id/btnreprogramar"
+                    android:text="REPROGRAMAR"
+                    android:padding="15dp"
+                    android:layout_below="@+id/layoutDiastólica"
+                    android:drawableLeft="@drawable/ic_calendar2"
+                    android:textColor="@color/white"
+                    android:background="@drawable/bk_boton_plano"
+                    android:stateListAnimator="@null"
                     android:layout_marginTop="10dp"
-                    android:text="Reprogramar"
-                    android:background="@drawable/round_edit_text2"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/red"
-                    android:padding="18dp"
-                    android:drawableLeft="@drawable/ic_calendar"
                     android:gravity="left|center"
                     android:drawablePadding="8dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </Button>
 
+
+
+<!--                <Button-->
+<!--                    android:id="@+id/btnPagar"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:text="PAGAR"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:padding="15dp"-->
+<!--                    android:drawableLeft="@drawable/ic_payment2"-->
+<!--                    android:background="@drawable/btn_borde1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:gravity="left|center"-->
+<!--                    android:drawablePadding="8dp"-->
+<!--                    android:layout_marginBottom="10dp"-->
+<!--                    android:layout_height="match_parent">-->
+<!--                </Button>-->
+
+
                 <Button
+                    android:id="@+id/btnPagar"
+                    android:text="PAGAR"
+                    android:padding="15dp"
+                    android:layout_below="@+id/layoutDiastólica"
+                    android:drawableLeft="@drawable/ic_calendar2"
+                    android:textColor="@color/white"
+                    android:background="@drawable/bk_boton_plano"
+                    android:stateListAnimator="@null"
                     android:layout_marginTop="10dp"
-                    android:text="Pagar"
-                    android:background="@drawable/round_edit_text2"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/red"
-                    android:padding="18dp"
-                    android:drawableLeft="@drawable/ic_payment"
                     android:gravity="left|center"
                     android:drawablePadding="8dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </Button>
+
+<!--                <Button-->
+<!--                    android:id="@+id/btnreprogramar"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:text="Reprogramar"-->
+<!--                    android:background="@drawable/round_edit_text2"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:textColor="@color/red"-->
+<!--                    android:padding="18dp"-->
+<!--                    android:drawableLeft="@drawable/ic_calendar"-->
+<!--                    android:gravity="left|center"-->
+<!--                    android:drawablePadding="8dp"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                </Button>-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/btnPagar"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:text="Pagar"-->
+<!--                    android:background="@drawable/round_edit_text2"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:textColor="@color/red"-->
+<!--                    android:padding="18dp"-->
+<!--                    android:drawableLeft="@drawable/ic_payment"-->
+<!--                    android:gravity="left|center"-->
+<!--                    android:drawablePadding="8dp"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                </Button>-->
+
+
+
 
 <!--                <TextView-->
 <!--                    android:text="Anular Cita"-->

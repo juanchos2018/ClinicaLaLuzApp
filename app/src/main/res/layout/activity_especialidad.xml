@@ -55,7 +55,6 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reservas"
@@ -83,9 +82,6 @@
                 android:src="@drawable/ic_phone_2" />
 
             </LinearLayout>
-
-
-
 
 <!--            <LinearLayout-->
 <!--                android:layout_below="@+id/loginPass"-->
@@ -156,13 +152,40 @@
 <!--        android:verticalSpacing="1dp"-->
 <!--        android:horizontalSpacing="1dp"/>-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerespecialiad"
-        android:layout_marginTop="8dp"
-        android:padding="1dp"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignTop="@id/listview"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            app:cardElevation="10dp"
+            android:padding="8dp"
+            app:cardCornerRadius="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/simpleProgressBar6"
+                android:visibility="invisible"
+                android:indeterminateTint="#E14B34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </androidx.cardview.widget.CardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerespecialiad"
+            android:layout_marginTop="8dp"
+            android:padding="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </FrameLayout>
+
 
 
 

@@ -45,8 +45,6 @@ class InicioSesionActivity : AppCompatActivity() {
         binding = ActivityInicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         val preferences = getSharedPreferences("datosuser", MODE_PRIVATE)
         var NUM_DOC_IDENTIDAD = preferences.getString("NUM_DOC_IDENTIDAD", null)
 
@@ -56,10 +54,7 @@ class InicioSesionActivity : AppCompatActivity() {
             intent.putExtra("TipoSesion", tipodoc)
             startActivity(intent)
             finish()
-
         }
-
-
 
         var list = ArrayList<String>()
         list.add("Dni")
@@ -72,7 +67,6 @@ class InicioSesionActivity : AppCompatActivity() {
             var tipo = binding.spinnerTipoDocumento.selectedItem.toString()
             var documento = binding.etNumero.text.toString()
             iniciarsesion(tipo, documento)
-
         }
         binding.etNumero.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -81,6 +75,9 @@ class InicioSesionActivity : AppCompatActivity() {
                    // binding.newPulso.requestFocus()
                     binding.btningresar.setBackgroundResource(R.drawable.btn_borde1)
                     binding.btningresar.setTextColor(resources.getColor(R.color.white))
+                }else {
+                    binding.btningresar.setBackgroundResource(R.drawable.btn_borde3)
+                    binding.btningresar.setTextColor(resources.getColor(R.color.black))
                 }
             }
             override fun afterTextChanged(s: Editable) {
@@ -97,12 +94,10 @@ class InicioSesionActivity : AppCompatActivity() {
             binding.etNumero.setError("Debe completar este campo")
         } else {
 
-        //            var progres = ProgressDialog(this)
+        //           var progres = ProgressDialog(this)
         //            progres.setMessage("Cargando...")
         //            progres.show()
-
              loanding("","")
-
             var tipodoc = ""
             if (tipo == "Dni") {
                 tipodoc = "DN"
@@ -112,16 +107,13 @@ class InicioSesionActivity : AppCompatActivity() {
                 tipodoc = "CE"
             }
 
-            val url =
-                "http://161.132.198.52:8080/app_laluz/pdoiniciosesion.php?tipo=$tipodoc&doc=$documento"
+            var peticion="/Controllers/UsuarioController.php?condicion=login&tipo=$tipodoc&doc=$documento"
             val rq = Volley.newRequestQueue(this)
             val jst = JsonObjectRequest(
-                Request.Method.GET, url, null,
+                Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
                 { response: JSONObject ->
                     val json = response.optJSONArray("usuario")
-
                         alert.dismiss()
-
                     var jsonObject: JSONObject? = null
                     try {
                         jsonObject = json.getJSONObject(0)

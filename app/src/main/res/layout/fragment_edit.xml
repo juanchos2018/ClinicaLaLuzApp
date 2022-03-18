@@ -9,11 +9,9 @@
     tools:context=".Fragment.EditFragment">
 
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
 <LinearLayout
     android:orientation="vertical"
@@ -25,6 +23,7 @@
         android:id="@+id/etnombres"
         android:paddingLeft="15dp"
         android:text=""
+        android:hint="Nombres"
         android:background="@null"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
@@ -42,6 +41,7 @@
 
     <EditText
         android:id="@+id/etapellidoP"
+        android:hint="Apellido"
         android:background="@null"
         android:paddingLeft="15dp"
         android:text=""
@@ -62,6 +62,7 @@
         android:id="@+id/etapellidoM"
         android:background="@null"
         android:paddingLeft="15dp"
+        android:hint="Apellido"
         android:text=""
         android:layout_marginBottom="12dp"
         android:layout_width="match_parent"
@@ -80,6 +81,8 @@
         android:id="@+id/etcorreo"
         android:background="@null"
         android:paddingLeft="15dp"
+        android:drawableLeft="@drawable/ic_mail"
+        android:drawablePadding="10dp"
         android:text=""
         android:hint="Correo Electronico"
         android:layout_marginBottom="12dp"
@@ -97,6 +100,8 @@
     <EditText
         android:id="@+id/etNumerodocumento"
         android:hint="Numero de Documento"
+        android:drawableLeft="@drawable/ic_document"
+        android:drawablePadding="10dp"
         android:background="@null"
         android:paddingLeft="15dp"
         android:text=""
@@ -179,6 +184,8 @@
         android:background="@null"
         android:paddingLeft="15dp"
         android:text=""
+        android:drawableLeft="@drawable/ic_phone"
+        android:drawablePadding="10dp"
         android:hint="Numero de Telefono"
         android:layout_marginBottom="12dp"
         android:layout_width="match_parent"
@@ -207,8 +214,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
         </TextView>
-
-
         <Button
             android:id="@+id/btnfechanacimiento"
             android:layout_weight="1.5"

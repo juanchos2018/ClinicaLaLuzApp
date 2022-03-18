@@ -20,8 +20,7 @@
         </ImageView>
         <TextView
             android:id="@+id/tvnombrescompleto"
-            android:text="Andres perez"
-
+            android:text=""
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content">
@@ -41,15 +40,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:src="@drawable/ic_documento"
+            android:src="@drawable/ic_document"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
         </ImageView>
         <TextView
             android:id="@+id/tvnumerodocumento"
-            android:text="45713875"
-
+            android:text=""
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content">
@@ -137,7 +135,7 @@
 
         <TextView
             android:id="@+id/tvtipogenero"
-            android:text="Genero Masculino"
+            android:text=""
             android:textSize="18sp"
             android:layout_width="0dp"
             android:layout_weight="3"

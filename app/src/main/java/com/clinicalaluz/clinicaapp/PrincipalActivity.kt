@@ -39,6 +39,7 @@ class PrincipalActivity : AppCompatActivity() {
 
         binding.cardmiscitas.setOnClickListener {
             val intent = Intent(this, MisCitasActivity::class.java)
+            intent.putExtra("tipoEntrada", "miscitas")
             startActivity(intent)
         }
 
@@ -64,7 +65,7 @@ class PrincipalActivity : AppCompatActivity() {
 //        }
 
         val navView = findViewById<BottomNavigationView>(com.clinicalaluz.clinicaapp.R.id.nav_view)
-      binding.navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+       binding.navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
 
 //        val appBarConfiguration = AppBarConfiguration.Builder(

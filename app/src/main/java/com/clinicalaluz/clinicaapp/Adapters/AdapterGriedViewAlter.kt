@@ -77,6 +77,8 @@ class AdapterGriedViewAlter(private val context: Activity, private var listaMedi
                 intent.putExtra("PRECIO_V", PRECIO_V)
                 intent.putExtra("NOM_SUCURSAL", NOM_SUCURSAL)
                 intent.putExtra("COD_SUCURSAL", COD_SUCURSAL)
+                intent.putExtra("COD_DOCUMENTO", "")//OS  FT BV
+                intent.putExtra("COD_EXPEDIENTE", "")
                 context.startActivity(intent)
             }
         }

@@ -97,9 +97,10 @@
                 <Button
                     android:id="@+id/buttonLogin"
                     android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="50dp"
                     android:layout_below="@+id/loginPass"
-                    android:layout_weight="1"
+
                     android:background="@drawable/button_menu_ext"
                     android:text="@string/buttonLogin"
                     android:textColor="#882727"

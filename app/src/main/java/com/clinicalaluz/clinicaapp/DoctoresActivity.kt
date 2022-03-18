@@ -24,7 +24,6 @@ import kotlin.collections.ArrayList
 
 class DoctoresActivity : AppCompatActivity() {
 
-
     private lateinit var binding : ActivityDoctoresBinding
     private  var COD_SUCURSAL =""
     private  var especialidad=""
@@ -32,12 +31,14 @@ class DoctoresActivity : AppCompatActivity() {
     private  lateinit var  adapter: AdapterMedicos
     var FECHA=""
     var FECHA2=""
-
     var FechaActual=""
     var FECHABD=""
     var NOM_SUCURSAL=""
     var COD_ESPECIALIDAD=""
     var PRECIO_V=""
+    var COD_DOCUMENTO=""
+    var COD_EXPEDIENTE=""
+    var COD_ATENCION=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_doctores)
@@ -52,6 +53,10 @@ class DoctoresActivity : AppCompatActivity() {
         COD_ESPECIALIDAD = intent.getSerializableExtra("COD_ESPECIALIDAD").toString()
         PRECIO_V = intent.getSerializableExtra("PRECIO_V").toString()
 
+        COD_DOCUMENTO = intent.getSerializableExtra("COD_DOCUMENTO").toString()
+        COD_EXPEDIENTE = intent.getSerializableExtra("COD_EXPEDIENTE").toString()
+        COD_ATENCION = intent.getSerializableExtra("COD_ATENCION").toString()
+
 
         val linearLayoutManager2 = LinearLayoutManager(this)
 
@@ -63,19 +68,27 @@ class DoctoresActivity : AppCompatActivity() {
         }
         binding.tvespecialidad1.text = especialidad
 
-
         binding.calendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, day ->
             var mes = month + 1
             FECHA = "$day/$mes/$year"
-           // FECHABD= String.format("$year-${month+1}-$day")
+            var lenghtdia =day.toString().length
             var leng = mes.toString().length
+
             if (leng==1){
-                FECHABD=String.format("$year-0${month+1}-$day")
+                if (lenghtdia==1){
+                    FECHABD=String.format("$year-0$mes-0$day")
+                }else{
+                    FECHABD=String.format("$year-0$mes-$day")
+                }
             }else{
-                FECHABD=String.format("$year-${month+1}-$day")
+                if (lenghtdia==1){
+                    FECHABD=String.format("$year-$mes-0$day")
+                }else{
+                    FECHABD=String.format("$year-$mes-$day")
+                }
+              //  FECHABD=String.format("$year-$mes-$day")
             }
             FECHA2 = "$year-$mes-$day"
-
             val inputDateStr = FECHA2
             try {
                 val fromServer = SimpleDateFormat("yyyy-MM-dd")
@@ -87,20 +100,14 @@ class DoctoresActivity : AppCompatActivity() {
 
                 FechaActual=diactual+" "+day +" de " +mess
                 binding.tvnombredia.text = FechaActual
-
                 showMedics(FECHABD)
-
-
             } catch (e: ParseException) {
                 e.printStackTrace()
                 Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
         })
         binding.calendarView.setMinDate(System.currentTimeMillis())
-
         showMedics(FECHABD)
-
-
     }
     private fun dateTimeDefect(){
         val c = Calendar.getInstance()
@@ -114,16 +121,27 @@ class DoctoresActivity : AppCompatActivity() {
         val date = fromServer.parse(fechacurrent)
         val nombredia = SimpleDateFormat("EEEE")
         val nombremes = SimpleDateFormat("MMMM")
-
         val diactual = nombredia.format(date)
         val mess = nombremes.format(date)
         FechaActual =diactual+" "+ dd +" de "+ mess
         binding.tvnombredia.text = FechaActual
-        var leng = MM.toString().length
+        var mes = MM+1
+        var leng = mes.toString().length
+        var lenghtdia =dd.toString().length
         if (leng==1){
-            FECHABD=String.format("$yyyy-0${MM+1}-$dd")
+            if (lenghtdia==1){
+                FECHABD=String.format("$yyyy-0$mes-0$dd")
+            }else{
+                FECHABD=String.format("$yyyy-0$mes-$dd")
+            }
+           // FECHABD=String.format("$yyyy-0${MM+1}-$dd")
         }else{
-            FECHABD=String.format("$yyyy-${MM+1}-$dd")
+            if (lenghtdia==1){
+                FECHABD=String.format("$yyyy-$mes-0$dd")
+            }else{
+                FECHABD=String.format("$yyyy-$mes-$dd")
+            }
+          //  FECHABD=String.format("$yyyy-${MM+1}-$dd")
         }
 
     }
@@ -133,8 +151,9 @@ class DoctoresActivity : AppCompatActivity() {
 
     fun showMedics(fecha:String){
         listaMedicos.clear()
-        var peticion = "/pdoSelect.php?especialidad=$especialidad&COD_SUCURSAL=$COD_SUCURSAL&fecha=$fecha"
+        var peticion = "/Controllers/DoctoresController.php?tipo=listdoc&especialidad=$especialidad&COD_SUCURSAL=$COD_SUCURSAL&fecha=$fecha"
         binding.simpleProgressBar2.setVisibility(View.VISIBLE);
+       // Log.e("petiticion",peticion)
         val rq = Volley.newRequestQueue(this)
         val arr = JsonArrayRequest(
             Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
@@ -164,8 +183,11 @@ class DoctoresActivity : AppCompatActivity() {
                     intent.putExtra("COD_SUCURSAL", COD_SUCURSAL)
                     intent.putExtra("DES_AUXILIAR", listaMedicos.get(binding.recylcerMedicos.getChildAdapterPosition(v!!)).nameMedic)
                     intent.putExtra("COD_MEDICO", listaMedicos.get(binding.recylcerMedicos.getChildAdapterPosition(v!!)).COD_MEDICO)
-                    startActivity(intent)
+                    intent.putExtra("COD_DOCUMENTO", COD_DOCUMENTO)
+                    intent.putExtra("COD_EXPEDIENTE", COD_EXPEDIENTE)
+                    intent.putExtra("COD_ATENCION", COD_ATENCION)
 
+                    startActivity(intent)
                 }
                 binding.simpleProgressBar2.setVisibility(View.GONE)
 
@@ -179,7 +201,6 @@ class DoctoresActivity : AppCompatActivity() {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(volleyError: VolleyError) {
-
                     binding.simpleProgressBar2.setVisibility(View.GONE)
                     Log.e("errror",volleyError.toString() )
                     Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()

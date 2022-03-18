@@ -60,12 +60,39 @@
         android:maxLength="35"/>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recylcersedes"
-        android:padding="15dp"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recylcersedes"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignTop="@id/listview"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            app:cardElevation="10dp"
+            android:padding="8dp"
+            app:cardCornerRadius="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/simpleProgressBar7"
+                android:visibility="invisible"
+                android:indeterminateTint="#E14B34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </androidx.cardview.widget.CardView>
+
+
+    </FrameLayout>
+
 
 </LinearLayout>

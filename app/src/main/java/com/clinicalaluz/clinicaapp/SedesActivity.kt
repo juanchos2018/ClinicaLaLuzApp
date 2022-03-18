@@ -71,9 +71,8 @@ class SedesActivity : AppCompatActivity() {
         super.onStart()
     }
     fun  ListaSedes(){
-
-        var peticion ="/pdoSelectSedes.php"
-
+        binding.simpleProgressBar7.visibility= View.VISIBLE
+        var peticion ="/Controllers/SedesController.php?tipo=listsedes"
         val rqSp = Volley.newRequestQueue(this)
         val js = JsonArrayRequest(
             Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
@@ -91,6 +90,7 @@ class SedesActivity : AppCompatActivity() {
 
                adapter = AdapterSedes(this, listSedes)
                binding.recylcersedes.adapter=adapter
+               binding.simpleProgressBar7.visibility=View.GONE
 
 //                adapter.setOnClickListener { v: View? ->
 //                    val intent = Intent(this, EspecialidadActivity::class.java)
@@ -102,7 +102,7 @@ class SedesActivity : AppCompatActivity() {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(volleyError: VolleyError) {
-
+                    binding.simpleProgressBar7.visibility=View.GONE
                     Log.e("errror",volleyError.toString() )
                     Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
                 }

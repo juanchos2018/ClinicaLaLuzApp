@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.clinicalaluz.clinicaapp.Interface.InterfaceHorario
 import com.clinicalaluz.clinicaapp.R
 import com.clinicalaluz.clinicaapp.clases.Horario
 
 
-class AdapterHorario(private val context: Activity, private var listaHorario: ArrayList<Horario>,
-                     var intter: InterfaceHorario?
-):
+class AdapterHorario(private val context: Activity, private var listaHorario: ArrayList<Horario>, var intter: InterfaceHorario?):
     RecyclerView.Adapter<AdapterHorario.CustomVeiwHolder>(), View.OnClickListener  {
     var row_index=0
 
@@ -29,7 +29,6 @@ class AdapterHorario(private val context: Activity, private var listaHorario: Ar
    // InterfaceHorario
    lateinit var interfaceHorario: InterfaceHorario
    // var interfaceHorario: InterfaceHorario? = null
-
 
     var selectedItemPos = -1
     var lastItemSelectedPos = -1
@@ -81,8 +80,12 @@ class AdapterHorario(private val context: Activity, private var listaHorario: Ar
                selectedItem = position
                notifyItemChanged(previousItem)
               //  notifyItemChanged(position)
-               holder.cardView!!.setBackgroundDrawable(context.resources.getDrawable(R.drawable.btn_borde2))
-
+               //holder.cardView!!.setBackgroundDrawable(context.resources.getDrawable(R.drawable.btn_borde2))
+              holder.cardView!!.setBackgroundResource( R.drawable.btn_borde2)
+              if (position==0){
+                 // Toast.makeText(context,position.toString() , Toast.LENGTH_LONG).show()
+                  holder.cardView!!.setBackgroundResource( R.drawable.btn_borde2)
+              }
               var horario =   Horario(listaHorario[position].COD_DOCUMENTO,listaHorario[position].IDE_HORA,listaHorario[position].DES_HORA,"","")
               intter?.onCallback(horario)
 
@@ -91,13 +94,9 @@ class AdapterHorario(private val context: Activity, private var listaHorario: Ar
 
     }
 
-
-
     interface ItemClickListener {
         fun itemClick()
     }
-
-
 
     companion object {
         private const val lastClickedPosition = -1

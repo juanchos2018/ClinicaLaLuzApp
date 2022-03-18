@@ -244,16 +244,19 @@
                     android:background="@drawable/rounded_edit_text"/>
             </RelativeLayout>
 
+
             <Button
                 android:id="@+id/savePresion"
+                android:text="Cerrar"
                 android:layout_below="@+id/layoutDiastólica"
-                android:text="guardar"
-                android:layout_marginTop="10dp"
-                android:background="@color/red"
                 android:textColor="@color/white"
+                android:background="@drawable/bk_boton_plano"
+                android:stateListAnimator="@null"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
             </Button>
         </RelativeLayout>
 

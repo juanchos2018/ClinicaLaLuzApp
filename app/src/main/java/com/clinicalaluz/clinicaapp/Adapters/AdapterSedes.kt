@@ -120,12 +120,6 @@ class AdapterSedes (private val context: Activity, private var itemList: ArrayLi
             tvtelefono=view.findViewById(R.id.tvtelefonoclinica)
             img=view.findViewById(R.id.imgsede)
             imglocation=view.findViewById(R.id.imglocation)
-
-
         }
-
-
     }
-
-
 }

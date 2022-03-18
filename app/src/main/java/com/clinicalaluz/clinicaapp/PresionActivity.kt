@@ -43,6 +43,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.tapadoo.alerter.Alerter
 import org.json.JSONException
+import org.json.JSONObject
+import org.json.JSONTokener
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -84,7 +86,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var listaTest =   ArrayList<ClsTest>()
 
     private  lateinit var alert : AlertDialog
-
+    private  lateinit var alert2 : AlertDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPresionBinding.inflate(layoutInflater)
@@ -255,6 +257,11 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
         val alert = dialogBuilder.create()
         btngenerar.setOnClickListener {
+            if (tiporeporte){
+                if (true){
+                }
+            }else{
+            }
             alert.dismiss()
             consultaReportes(tiporeporte,fechasendpostDialogo,fechasendpostDialogo2)
         }
@@ -266,17 +273,19 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     {
         var tipos =""
         if (tipo){
-            tipos ="fechas"
-            Toast.makeText(this, fecha1+" "+ fecha2, Toast.LENGTH_SHORT).show()
-
+            tipos ="fechasp"
         }else{
-            tipos ="todo"
-
+            tipos ="todop"
         }
-        var progres = ProgressDialog(this)
+        var result =when(tipo){
+            true->"fechas"
+            false->"todo"
+        }
+        val progress = ProgressBar(this)
+        val progres = ProgressDialog(this)
         progres.setMessage("Cargando...")
         progres.show()
-        val peticion = "/pdoConsultas.php?tipo=$tipos&documento=$DniPaciente&fecha1=$fecha1&fecha2=$fecha2"
+        val peticion = "/Controllers/UsuarioController.php?condicion=$tipos&documento=$DniPaciente&fecha1=$fecha1&fecha2=$fecha2"
         val rq = Volley.newRequestQueue(this)
         val arr = JsonArrayRequest(Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
             { response ->
@@ -293,10 +302,9 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 }else{
 
                  }
-                progres.dismiss()
                // alert.dismiss()
+                progres.dismiss()
                 genetatepdf()
-
             },
             Response.ErrorListener { error ->
                 Toast.makeText(this, "ERROR: %s".format(error.toString()), Toast.LENGTH_SHORT).show()
@@ -340,13 +348,13 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 val newSistolica = (binding.newSistolica.text.toString()).toInt()
                 val newDiastolica = (binding.newDiastolica.text.toString()).toInt()
                 var newPulso =(binding.newPulso.text.toString()).toInt()
-
-               // Log.e("meee",DniPaciente+"-"+fechasendpost+"-"+newSistolica.toString()+"-" +newDiastolica.toString())
-                val peticion = "/pdoInsertPresion.php?"
+                val peticion = "/Controllers/UsuarioController.php"
                 val stringRequest = object : StringRequest(Request.Method.POST, getString(R.string.URL_BASE)+peticion,
                     Response.Listener { response ->
                         try {
-                            if (response.toString().trim()=="Succes"){
+                            val jsonObject = JSONTokener(response).nextValue() as JSONObject
+                            val message = jsonObject.getString("message")
+                            if (message=="Success"){
                                 consultData()
                                 binding.newPulso.text.clear()
                                 binding.newSistolica.text.clear()
@@ -369,6 +377,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         val params = HashMap<String, String>()
+                        params.put("tipo","presion")
                         params.put("doc",DniPaciente)
                         params.put("fecha",fechasendpost)
                         params.put("sistolica",newSistolica.toString())
@@ -396,7 +405,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         val listaDiastolica = ArrayList<Entry>()
         var listaTest2 =   ArrayList<ClsTest>()
         val lineDataSeta = ArrayList<ILineDataSet>()
-        val peticion = "/pdoSelectPresion.php?doc=$DniPaciente"
+        val peticion = "/Controllers/UsuarioController.php?condicion=presion&doc=$DniPaciente"
         val rq = Volley.newRequestQueue(this)
         val arr = JsonArrayRequest(Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
             { response ->
@@ -407,9 +416,6 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                     val REG_SISTOLICA = response.getJSONObject(x).getString("REG_PULSO_SISTOLICA")
                     val DIASTOLICA = response.getJSONObject(x).getString("REG_PULSO_DIASTOLICA")
                     val PULSO = response.getJSONObject(x).getString("REG_PULSO")
-//                    val presionf2 = REG_SISTOLICA.toFloat()
-//                    val presionf3 = DIASTOLICA.toFloat()
-//                    val presionf = PULSO.toFloat()
 
                     listaSistolica.add(Entry(REG_SISTOLICA.toFloat(), x))
                     listaDiastolica.add(Entry(DIASTOLICA.toFloat(), x))
@@ -430,78 +436,28 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 lineDataSeta.add(linedataset2)
                 lineDataSeta.add(linedataset3)
                 lineDataSeta.add(linedataset)
-                for (item in lineDataSeta){
 
-
-                }
                 val data = LineData(xvalues, lineDataSeta)
 
                 binding.lineChart.data = data
                 binding.lineChart.setBackgroundColor(resources.getColor(R.color.white))
                 binding.lineChart.animateXY(3000,3000)
                 binding.lineChart.setOnChartValueSelectedListener(object :OnChartValueSelectedListener{
-                    override fun onValueSelected(e: Entry?, dataSetIndex: Int, h: Highlight?) =
+                    override fun onValueSelected(e: Entry, dataSetIndex: Int, h: Highlight?) =
                         try {
-                             var tipo=""
-                             when(dataSetIndex){
-                                 0->{
-                                     tipo="SISTOLICA"
-                                 }
-                                 1->{
-                                     tipo="DIASTOLICA"
-                                 }
-                                 2->{
-                                    tipo="PULSO"
-                                 }
-                                 else -> {
-                                     print("x no es 1 o 2")
-                                 }
-                             }
-
-                            for (item in listaSistolica)
-                            {
-                                Log.e("itemsSistolicasss",item.toString())
-                               // Log.e("itemsSistolica",item.xIndex.toString())
-                            }
-                            for (item in listaSistolica)
-                            {
-                                //Log.e("itemsSistolica",item.toString())
-                                var array =item.toString().split(":")
-
-                                Log.e("itemsSistolica", array[2])
-                            }
-                            for (item in listaTest2){
-                                Log.e("items",item.SISTOLICA)
-                                if (item.SISTOLICA==tipo){
-                                    Toast.makeText(applicationContext, item.FECHA, Toast.LENGTH_SHORT).show()
-                                   break
-
-                                }else if (item.DIASTOLICA==tipo){
-                                    Toast.makeText(applicationContext, item.FECHA, Toast.LENGTH_SHORT).show()
-                                    break
-
-                                }else if (item.PULSO==tipo){
-                                    Toast.makeText(applicationContext, item.FECHA, Toast.LENGTH_SHORT).show()
-                                    break
-                                }else{
-
-                                }
-
-                            }
-
-                           // Toast.makeText(applicationContext, tipo, Toast.LENGTH_SHORT).show()
-
+                            var valor1 =listaTest2.get(e.xIndex).SISTOLICA
+                            var valor2 =listaTest2.get(e.xIndex).DIASTOLICA
+                            var valor3 =listaTest2.get(e.xIndex).PULSO
+                            var fechapulso =listaTest2.get(e.xIndex).FECHA
+                            detallePulso("SISTOLICA " +valor1,"DIASTOLICA "+valor2,"PULSO "+valor3,fechapulso)
 
                         }catch (ex:java.lang.Exception){
                         }
 
                     override fun onNothingSelected() {
-
                     }
 
                 })
-
-
 //                binding.lineChart.isDrawingCacheEnabled=true
 //                var bitmap: Bitmap
 //                bitmap = Bitmap.createBitmap( binding.lineChart.getDrawingCache());
@@ -516,35 +472,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     }
 
 
-    private fun consultData2(){
-        val xvalues = ArrayList<String>()
-        val lineentry = ArrayList<Entry>()
-        val peticion = "/pdoSelectPresion.php?doc=$DniPaciente"
-        val rq = Volley.newRequestQueue(this)
-        val arr = JsonArrayRequest(Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
-            { response ->
-                for(x in 0..response.length()-1){
-                    val fecha = response.getJSONObject(x).getString("FECHA")
-                    xvalues.add(fecha)
-                    val presion = response.getJSONObject(x).getString("REG_PULSO")
-                    val presionf = presion.toFloat()
-                    lineentry.add(Entry(presionf, x))
-                }
-                val linedataset = LineDataSet(lineentry, "Historial del nivel de azucar")
-                linedataset.color = resources.getColor(R.color.purple_200)
-                val data = LineData(xvalues, linedataset)
-                binding.lineChart.data = data
-                binding.lineChart.setBackgroundColor(resources.getColor(R.color.white))
-                binding.lineChart.animateXY(3000,3000)
-            },
-            Response.ErrorListener { error ->
-                Toast.makeText(this, "ERROR: %s".format(error.toString()), Toast.LENGTH_SHORT).show()
-            })
-        var socketTimeout =30000
-        var policy = DefaultRetryPolicy(socketTimeout,DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        arr.setRetryPolicy(policy);
-        rq.add(arr)
-    }
+
     private fun dateTimeDefect(){
 
         val c = Calendar.getInstance()
@@ -622,7 +550,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             Toast.makeText(applicationContext, ex.toString(), Toast.LENGTH_LONG).show()
         }
         myPdfDodument.close()
-        Toast.makeText(applicationContext, "creado="+myFilePath4, Toast.LENGTH_LONG).show()
+       // Toast.makeText(applicationContext, "creado="+myFilePath4, Toast.LENGTH_LONG).show()
 
     }
 
@@ -664,6 +592,40 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     }
 
 
+    private  fun detallePulso(sistolica:String,diastolica:String,puslo:String,fechapulso:String){
+
+        val dialogBuilder = AlertDialog.Builder(this)
+        val btncerrar: Button
+        val tvsistolica: TextView
+        val tvdiastolica : TextView
+        val tvpuslso: TextView
+        val tvfecha  :TextView
+        val tvnombreuser  :TextView
+
+        val v = LayoutInflater.from(applicationContext)
+            .inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_detalle, null)
+
+        dialogBuilder.setView(v)
+        btncerrar = v.findViewById(com.clinicalaluz.clinicaapp.R.id.idbtncerrardialogo3) as Button
+        tvsistolica=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvsistolica)
+        tvdiastolica=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvdiastolica)
+        tvpuslso=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvpulso)
+        tvfecha=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvfecha)
+        tvnombreuser=v.findViewById(com.clinicalaluz.clinicaapp.R.id.tvnombreuser)
+
+        tvsistolica.text=sistolica
+        tvdiastolica.text=diastolica
+        tvpuslso.text=puslo
+        tvfecha.text=fechapulso
+        tvnombreuser.text=DES_AUXILIAR
+        alert2 = dialogBuilder.create()
+        btncerrar.setOnClickListener {
+            alert2.dismiss()
+        }
+        alert2.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert2.show()
+    }
+
     private fun fechados(){
         val recogerFecha = DatePickerDialog(this,
             { view, year, month, dayOfMonth ->
@@ -691,7 +653,6 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         recogerFecha.getDatePicker().setMinDate(System.currentTimeMillis())
         recogerFecha.show()
     }
-
 
 
 

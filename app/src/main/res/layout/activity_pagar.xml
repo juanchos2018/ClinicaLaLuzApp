@@ -8,6 +8,17 @@
     android:layout_height="match_parent"
     tools:context=".PagarActivity">
 
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -87,9 +98,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </TextView>
-
-
-
     <TextView
         android:id="@+id/tvfechacita3"
         android:drawablePadding="5dp"
@@ -179,8 +187,10 @@
 
         <EditText
             android:id="@+id/numeroruc"
-             android:layout_width="0dp"
+            android:layout_width="0dp"
+            android:hint="RUC"
             android:layout_weight="1"
+            android:inputType="number"
             android:layout_height="wrap_content">
         </EditText>
         <EditText
@@ -225,6 +235,8 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardprogres"
+        android:visibility="invisible"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         app:cardElevation="10dp"
@@ -249,7 +261,7 @@
     </TextView>
 
     <TextView
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:padding="10dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -269,7 +281,7 @@
     </Button>
 
 </LinearLayout>
-
-
+    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

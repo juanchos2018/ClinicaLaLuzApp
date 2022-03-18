@@ -48,6 +48,7 @@ class PagarActivity : AppCompatActivity() {
     var TIP_PACIENTE="PAR"
     var TIP_PARENTESCO="1"
     var TIP_COMPROBANTE="BV"
+    var COD_ATENCION=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,12 +69,14 @@ class PagarActivity : AppCompatActivity() {
         DES_HORA = intent.getSerializableExtra("DES_HORA").toString()
         COD_COBERTURA = intent.getSerializableExtra("COD_COBERTURA").toString()
 
+        COD_ATENCION=intent.getSerializableExtra("COD_ATENCION").toString()
+
         binding.tvhoracita.text=DES_HORA
         binding.tvfechacita3.text=FECHA
         binding.tvnombredoctor3.text=DES_AUXILIAR
         binding.tvsede4.text=NOM_SUCURSAL
         binding.tvespecialidad4.text=ESPECIALIDAD
-        simpleAlert("Se genero su cita ","lo puede ver en Mis Citas")
+
         binding.imageViewplaces.setOnClickListener {
             salir()
         }
@@ -87,7 +90,6 @@ class PagarActivity : AppCompatActivity() {
 
         binding.datosfactura.isVisible=false
         NameCliente()
-
 
         binding.numeroruc.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
@@ -111,8 +113,6 @@ class PagarActivity : AppCompatActivity() {
 //            override fun afterTextChanged(s: Editable) {
 //            }
 //        })
-
-
 //        binding.btnconsutlar.setOnClickListener {
 //            var ruc =binding.numeroruc.text
 //            consultarruc(ruc)
@@ -121,13 +121,12 @@ class PagarActivity : AppCompatActivity() {
 
     private fun consultarruc(ruc: Editable) {
         Toast.makeText(applicationContext, ruc, Toast.LENGTH_LONG).show()
-            val url = "http://161.132.198.52:8080/app_laluz/pdoConsultaRuc.php?ruc=$ruc"
+            val peticion = "/Controllers/PacienteController.php?tipo=ruc&ruc=$ruc"
             val rq = Volley.newRequestQueue(this)
             val jst = JsonObjectRequest(
-                Request.Method.GET, url, null,
+                Request.Method.GET, getString(R.string.URL_BASE)+peticion, null,
                 { response: JSONObject ->
                     Log.e("responmde ",response.toString())
-
                     try {
                         var razon_social =response.optString("razon_social")
                         binding.razonsocial.setText(razon_social)
@@ -168,43 +167,11 @@ class PagarActivity : AppCompatActivity() {
         intentLogin.putExtra("COD_CLIENTE",COD_CLIENTE)
         intentLogin.putExtra("COD_AUXILIAR",COD_AUXILIAR)
         intentLogin.putExtra("COD_SUCURSAL",COD_SUCURSAL)
-
         //COD_CLIENTE
-        Toast.makeText(applicationContext, binding.tvcodigoatencion.text, Toast.LENGTH_SHORT).show()
+       // Toast.makeText(applicationContext, binding.tvcodigoatencion.text, Toast.LENGTH_SHORT).show()
         startActivity(intentLogin)
     }
 
-
-    private  fun getPrecio(){
-        val url = "http://161.132.198.52:8080/app_laluz/pdoprecioespecialidad.php?cod_especialidad=$COD_ESPECIALIDAD&sucursal=$COD_SUCURSAL"
-        val rq = Volley.newRequestQueue(this)
-        val jst = JsonObjectRequest(
-            Request.Method.GET, url,null,
-            { response: JSONObject ->
-                val json = response.optJSONArray("especialidad")
-                Log.e("respsonse ", json.toString())
-                var jsonObject: JSONObject? = null
-                try {
-                    jsonObject = json.getJSONObject(0)
-                    var existe =jsonObject.optString("existe")
-
-                    if (existe.equals("si")){
-                        var precio =jsonObject.optString("PRECIO_P")
-                       // binding.btnpagar.text="PAGAR  $precio"
-                    }else{
-                        Log.e("no", "no existe")
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            },
-            object : Response.ErrorListener {
-                override fun onErrorResponse(volleyError: VolleyError) {
-                    Toast.makeText(applicationContext, "error,"+volleyError.toString()+"", Toast.LENGTH_LONG).show()
-                }
-            })
-        rq.add(jst)
-    }
 
 
     fun onRadioButtonClicked(view: View) {
@@ -215,13 +182,11 @@ class PagarActivity : AppCompatActivity() {
                     if (checked) {
                         TIP_COMPROBANTE="BV"
                         binding.datosfactura.isVisible=false
-                        Toast.makeText(applicationContext, TIP_COMPROBANTE, Toast.LENGTH_LONG).show()
                     }
                 R.id.rbdfactura ->
                     if (checked) {
-                        TIP_COMPROBANTE="FT"
+                        TIP_COMPROBANTE="FV"
                         binding.datosfactura.isVisible=true
-                        Toast.makeText(applicationContext, TIP_COMPROBANTE, Toast.LENGTH_LONG).show()
                     }
             }
         }
@@ -234,28 +199,34 @@ class PagarActivity : AppCompatActivity() {
         COD_PACIENTE= preferences.getString("COD_PACIENTE", null).toString()
         COD_CLIENTE = preferences.getString("COD_CLIENTE", null).toString()
         binding.tvnombrecliente.text=DES_AUXILIAR
-        GenerarCodigoAtencion(IDE_HORA,COD_MEDICO,NUM_DOC_IDENTIDAD,DES_AUXILIAR,FECHABD,COD_SUCURSAL,COD_ESPECIALIDAD,"AMB",COD_COBERTURA,COD_PACIENTE,COD_AUXILIAR,COD_CLIENTE,TIP_PACIENTE,TIP_PARENTESCO,"100","100","VA","PO","8","2","","")
+
+        if (COD_ATENCION==""){
+            GenerarCodigoAtencion(IDE_HORA,COD_MEDICO,NUM_DOC_IDENTIDAD,DES_AUXILIAR,FECHABD,COD_SUCURSAL,COD_ESPECIALIDAD,"AMB",COD_COBERTURA,COD_PACIENTE,COD_AUXILIAR,COD_CLIENTE,TIP_PACIENTE,TIP_PARENTESCO,"100","100","VA","PO","8","2","","")
+        }else{
+            binding.tvcodigoatencion.text=   COD_ATENCION
+            binding.btnpagar.isEnabled=true
+            binding.btnpagar.setBackgroundResource(R.drawable.btn_borde1)
+            binding.btnpagar.text="PAGAR  $PRECIO_V"
+        }
     }
+
 
     private fun salir() {
         finish()
     }
 
-    private fun obtenerdatosruc(){
-
-    }
     private  fun GenerarCodigoAtencion(id_hora:String,cod_medico:String,num_documento:String,nombres:String,fecha:String,sucursal:String,cod_especialidad:String,tip_cobertura:String,cod_cobertura:String,cod_paciente:String,cod_auxiliar:String,cod_cliente:String,tip_paciente:String,tip_parentesco:String,imp_valor_poliza:String,imp_valor_real:String,tip_copago:String,tip_valor:String,nuevo_convenio:String,nueva_empresa:String,cod_autorizacion:String,cod_asegurado:String){
 
         binding.simpleProgressBar4.setVisibility(View.VISIBLE);
+        binding.cardprogres.visibility=View.VISIBLE
 
-        val peticion = "/pdoCodigoAtencion.php?"
+        val peticion = "/Controllers/AtencionController.php?"
         val stringRequest = object : StringRequest(Request.Method.POST, getString(R.string.URL_BASE)+peticion,
             Response.Listener { response ->
                 try {
 
 //                    var jsonObject: JSONObject? = null
 //                    var codAtencion =jsonObject!!.getString("codAtencion")
-
                     var jsonObject=JSONTokener(response).nextValue() as JSONObject
                     var codAtencion =jsonObject.optString("codAtencion")
                      binding.tvcodigoatencion.text=   codAtencion
@@ -263,11 +234,14 @@ class PagarActivity : AppCompatActivity() {
                         binding.btnpagar.isEnabled=true
                         binding.btnpagar.setBackgroundResource(R.drawable.btn_borde1)
                         binding.btnpagar.text="PAGAR  $PRECIO_V"
+                        simpleAlert("Se genero su cita ","lo puede ver en Mis Citas")
                     }
 
                     binding.simpleProgressBar4.setVisibility(View.GONE)
+                    binding.cardprogres.visibility=View.GONE
                 } catch (e: JSONException) {
                     binding.simpleProgressBar4.setVisibility(View.GONE);
+                    binding.cardprogres.visibility=View.GONE
                     Toast.makeText(applicationContext, ""+e.message+"", Toast.LENGTH_LONG).show()
                     e.printStackTrace()
                 }
@@ -282,6 +256,7 @@ class PagarActivity : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
+                params.put("tipo","atencion")
                 params.put("nuevo_ide_hora",id_hora)
                 params.put("nuevo_cod_medico",cod_medico)
                 params.put("nuevo_doc_paciente",num_documento)
@@ -304,6 +279,7 @@ class PagarActivity : AppCompatActivity() {
                 params.put("nueva_empresa",nueva_empresa)
                 params.put("nuevo_cod_autorizacion",cod_autorizacion)
                 params.put("nuevo_cod_asegurado",cod_asegurado)
+                params.put("imp_total",PRECIO_V)
                 Log.e("params" , params.toString())
                 return params
             }

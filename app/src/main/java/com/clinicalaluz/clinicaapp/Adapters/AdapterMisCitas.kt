@@ -1,11 +1,14 @@
 package com.clinicalaluz.clinicaapp.Adapters
 
 import android.app.Activity
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.clinicalaluz.clinicaapp.R
 import com.clinicalaluz.clinicaapp.clases.ClsMisCitas
@@ -48,13 +51,17 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
         var dia = itemList.FEC_ATENCION.split('-')
         val fromServer = SimpleDateFormat("yyyy-MM-dd")
         val date = fromServer.parse(itemList.FEC_ATENCION)
-
         val nombremes = SimpleDateFormat("MMMM")
         val mess = nombremes.format(date)
+
         holder.tvfechascita3.text=dia[2]
         holder.tvnombremes.text=mess.substring(0,3)
         holder.tvhora.text=itemList.DES_HORA
         holder.tvtsede.text=itemList.NOM_SUCURSAL
+
+        if (itemList.COD_DOCUMENTO=="FV" || itemList.COD_DOCUMENTO=="BV"){
+            holder.cardview.setCardBackgroundColor(ContextCompat.getColor(context, R.color.verde))
+        }
     }
 
     inner class CustomVeiwHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -65,6 +72,7 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
         var tvminonbre:TextView
         var tvhora :TextView
         var tvtsede:TextView
+       var cardview :CardView
 
         init {
             tvespecialidad = view.findViewById(R.id.tvespecialidad)
@@ -74,6 +82,7 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
             tvminonbre =view.findViewById(R.id.tvminombre)
             tvhora=view.findViewById(R.id.tvhoracita2)
             tvtsede=view.findViewById(R.id.tvtsede)
+            cardview=view.findViewById(R.id.cardcitas)
         }
 
     }

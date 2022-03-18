@@ -44,9 +44,7 @@ private const val ARG_PARAM2 = "param2"
 
 class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener  {
 
-
     private lateinit var binding: FragmentEditBinding
-
 
     private var param1: String? = null
     private var param2: String? = null
@@ -92,7 +90,8 @@ class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetList
         pickDate()
 
         binding.btneditar.setOnClickListener {
-            sendPost()
+            //sendPost()
+            sendPut()
         }
 
         return binding.root
@@ -149,7 +148,8 @@ class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetList
     }
 
     private  fun DatosUser(dni:String){
-        val peticion = "/pdoSelectDni.php?doc=$dni"
+        var peticion="/Controllers/UsuarioController.php?condicion=info&doc=$dni"
+        // val peticion = "/pdoSelectDni.php?doc=$dni"
         val rq = Volley.newRequestQueue(context)
         val jst = JsonObjectRequest(
             Request.Method.GET, getString(R.string.URL_BASE)+peticion,null,
@@ -177,27 +177,15 @@ class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetList
                            binding.btnfechanacimiento.text="Sin Fecha"
                         }else{
                             binding.btnfechanacimiento.text=FEC_NACIMIENTO
-                            FECHA_NACIMIENTO=FEC_NACIMIENTO
-
-                           // FECHA_NACIMIENTO=
+                            FECHA_NACIMIENTO=FEC_NACIMIENTO                     
                             val fromServer = SimpleDateFormat("yyyy-MM-dd")
-                        //    val fromServer = SimpleDateFormat("dd-MM-yyyy")
-                           ///  FECHA_BD = fromServer.parse(FEC_NACIMIENTO).toString()
-
-                            //Log.e("fecha seteada",FECHA_BD)
-
-                         ///   Toast.makeText(requireContext(), FECHA_BD, Toast.LENGTH_LONG).show()
-
-
                         }
-
                         binding.etnombres.setText(nombres)
                         binding.etapellidoP.setText(apellidoPa)
                         binding.etapellidoM.setText(apellidoMa)
                         binding.etNumerodocumento.setText(doc)
                         binding.etNumerotelefono.setText(NUM_TELEFONO)
                         binding.etcorreo.setText(NUM_EMAIL)
-
 
                         if (genero=="FE"){
                             SEXO=genero
@@ -221,6 +209,80 @@ class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetList
                 }
             })
         rq.add(jst)
+    }
+
+
+    fun sendPut(){
+
+            val `objecto` = JSONObject()
+
+            var documento = binding.etNumerodocumento.text.toString()
+            var nombres = binding.etnombres.text.toString()
+            var apellidoP = binding.etapellidoP.text.toString()
+            var apellidoM = binding.etapellidoM.text.toString()
+            var celular = binding.etNumerotelefono.text.toString()
+            var email = binding.etcorreo.text.toString()
+
+            if (documento.length <= 7 || documento.length >= 9) {
+                //  Toast.makeText(applicationContext ,"El Numero de Documento con 8 digitos" , Toast.LENGTH_SHORT).show()
+                binding.etNumerodocumento.setError("El Numero de Documento con 8 digitos")
+            } else if (TextUtils.isEmpty(documento)) {
+                binding.etNumerodocumento.setError("Escribir Documento")
+
+            } else if (TextUtils.isEmpty(nombres)) {
+                binding.etnombres.setError("Escribir Nombres")
+            } else if (TextUtils.isEmpty(apellidoP)) {
+                binding.etapellidoP.setError("Escribir Apellido Paterno")
+            } else if (TextUtils.isEmpty(apellidoM)) {
+                binding.etapellidoM.setError("Escribir Apellido Materno")
+            } else if (TextUtils.isEmpty(email)) {
+                binding.etcorreo.setError("Escribir Correo")
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.etcorreo.setError("Coreo no valido")
+            } else {
+                try {
+                objecto.put("doc", documento)
+                objecto.put("nombres", nombres)
+                objecto.put("ape_paterno", apellidoP)
+                objecto.put("ape_materno", apellidoM)
+                objecto.put("fecha", FECHA_NACIMIENTO)
+                objecto.put("celular", celular)
+                objecto.put("email", email)
+                objecto.put("sexo", SEXO)
+                //Log.e("json ", objecto.toString())
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+                val peticion = "/Controllers/UsuarioController.php"
+                val rq = Volley.newRequestQueue(requireContext())
+                val jst = JsonObjectRequest(
+                    Request.Method.PUT, getString(R.string.URL_BASE) + peticion, objecto,
+                    { response: JSONObject ->
+                        //Log.e("response ", response.toString())
+                       //   val jsonObject = JSONTokener(response).nextValue() as JSONObject
+                        val estado = response.getString("estado")
+                        if (estado=="Editado"){
+                            men(
+                                "Actualizado",
+                                "Se ha actualizado sus datos"
+                            )
+                        }else{
+                            Toast.makeText(requireContext(),"Error al Editar", Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    object : Response.ErrorListener {
+                        override fun onErrorResponse(volleyError: VolleyError) {
+                            Log.e("respsonse ", volleyError.toString())
+                            Toast.makeText(
+                                requireContext(),
+                                "error," + volleyError.toString() + "",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+                rq.add(jst)
+            }
     }
 
 
@@ -260,7 +322,6 @@ class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetList
         else {
 
            // Toast.makeText(requireContext(), "enbtra eL ELSE " , Toast.LENGTH_LONG).show()
-
             var progres = ProgressDialog(requireContext())
             progres.setMessage("Cargando...")
             progres.show()
@@ -271,7 +332,7 @@ class EditFragment : Fragment(), OnClickListener, DatePickerDialog.OnDateSetList
                     try {
                         progres.dismiss()
 
-                            Log.e("respuesta",response)
+             
 
                         val jsonObject = JSONTokener(response).nextValue() as JSONObject
                         val estado = jsonObject.getString("estado")
