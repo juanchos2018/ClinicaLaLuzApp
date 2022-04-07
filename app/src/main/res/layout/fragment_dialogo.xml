@@ -54,6 +54,15 @@
                         android:layout_marginRight="10dp"
                         android:text=""
                         ></TextView>
+                    <TextView
+                        android:id="@+id/tvfechacita4"
+                        android:textSize="14sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text=""
+                        ></TextView>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -128,7 +137,23 @@
                     android:text="PAGAR"
                     android:padding="15dp"
                     android:layout_below="@+id/layoutDiastólica"
-                    android:drawableLeft="@drawable/ic_calendar2"
+                    android:drawableLeft="@drawable/ic_payment2"
+                    android:textColor="@color/white"
+                    android:background="@drawable/bk_boton_plano"
+                    android:stateListAnimator="@null"
+                    android:layout_marginTop="10dp"
+                    android:gravity="left|center"
+                    android:drawablePadding="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+
+                <Button
+                    android:id="@+id/btndescargar"
+                    android:text="DESCARGAR"
+                    android:padding="15dp"
+                    android:drawableLeft="@drawable/ic_payment2"
                     android:textColor="@color/white"
                     android:background="@drawable/bk_boton_plano"
                     android:stateListAnimator="@null"

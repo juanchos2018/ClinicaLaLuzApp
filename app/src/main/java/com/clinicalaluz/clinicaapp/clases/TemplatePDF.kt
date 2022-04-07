@@ -4,11 +4,16 @@ package com.clinicalaluz.clinicaapp.clases
 
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.widget.Toast
+import com.clinicalaluz.clinicaapp.PrincipalActivity
 import com.clinicalaluz.clinicaapp.R
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfPCell
@@ -171,6 +176,42 @@ class TemplatePDF(private  val context: Context) {
 
         }catch (ex:Exception){
         }
+    }
+    fun viewPdf(){
+       // var intent=
+//        val intent = Intent(context, PrincipalActivity::class.java)
+//        intent.putExtra("path", "dni")
+//        context.startActivity(intent)
+       // finish()
+
+        val packageManager = context.packageManager
+        val testIntent = Intent(Intent.ACTION_VIEW)
+        //testIntent.setType("application/pdf")
+        testIntent.type="application/pdf"
+        val list: List<*> =
+            packageManager.queryIntentActivities(testIntent, PackageManager.MATCH_DEFAULT_ONLY)
+        if (list.size > 0) {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+         //   val uri: Uri = Uri.fromFile(pdfFile)
+            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.N) {
+                val uri: Uri = Uri.parse(pdfFile.toString())
+                intent.setDataAndType(uri, "application/pdf")
+                context.startActivity(intent)
+            } else{
+                val uri: Uri = Uri.fromFile(pdfFile)
+                intent.setDataAndType(uri, "application/pdf")
+                context.startActivity(intent)
+            }
+
+        } else {
+            Toast.makeText(
+                context,
+                "Download a PDF Viewer to see the generated PDF",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
     }
     fun closeDocument(){
         document!!.close()

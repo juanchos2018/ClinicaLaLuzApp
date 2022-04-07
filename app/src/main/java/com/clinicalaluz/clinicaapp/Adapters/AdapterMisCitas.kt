@@ -45,7 +45,7 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
     override fun onBindViewHolder(holder: CustomVeiwHolder, position: Int) {
         val itemList=listaMisCitas.get(position)
         var sucurlsal=""
-        holder.tvespecialidad.setText(itemList.DES_ESPECIALIDAD)
+        holder.tvespecialidad.text=itemList.DES_ESPECIALIDAD+"-"+itemList.COD_DOCUMENTO
         holder.tvmedico.setText(itemList.DES_AUXILIAR)
         holder.tvminonbre.text=DES_AUXILIAR
         var dia = itemList.FEC_ATENCION.split('-')
@@ -60,7 +60,19 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
         holder.tvtsede.text=itemList.NOM_SUCURSAL
 
         if (itemList.COD_DOCUMENTO=="FV" || itemList.COD_DOCUMENTO=="BV"){
+
+            if (itemList.SITUACION=="ATE"){
+                holder.tvestado.text="Atendido"
+                holder.tvestado.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_atendido,0,0,0)
+            }else{
+                holder.tvestado.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_noatendido,0,0,0)
+                holder.tvestado.text="No Atendido"
+            }
             holder.cardview.setCardBackgroundColor(ContextCompat.getColor(context, R.color.verde))
+        }else{
+            holder.tvestado.text="No Pagado"
+            holder.cardview.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red))
+
         }
     }
 
@@ -72,7 +84,8 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
         var tvminonbre:TextView
         var tvhora :TextView
         var tvtsede:TextView
-       var cardview :CardView
+        var cardview :CardView
+        var tvestado:TextView
 
         init {
             tvespecialidad = view.findViewById(R.id.tvespecialidad)
@@ -83,6 +96,7 @@ class AdapterMisCitas (private val context: Activity, private var listaMisCitas:
             tvhora=view.findViewById(R.id.tvhoracita2)
             tvtsede=view.findViewById(R.id.tvtsede)
             cardview=view.findViewById(R.id.cardcitas)
+            tvestado=view.findViewById(R.id.tvestado)
         }
 
     }

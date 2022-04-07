@@ -9,20 +9,18 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.android.volley.*
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.clinicalaluz.clinicaapp.clases.ClsTest
 import com.clinicalaluz.clinicaapp.clases.ClsTest2
-import com.clinicalaluz.clinicaapp.clases.TemplatePDF
 import com.clinicalaluz.clinicaapp.clases.TemplatePDF2
 import com.clinicalaluz.clinicaapp.databinding.ActivityGlucosaBinding
 import com.github.mikephil.charting.data.Entry
@@ -130,7 +128,13 @@ class GlucosaActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                             val jsonObject = JSONTokener(response).nextValue() as JSONObject
                             val message = jsonObject.getString("message")
                             if (message=="Success"){
-                                Toast.makeText(applicationContext ,"Registrado con existo" , Toast.LENGTH_SHORT).show()
+
+                                val imm: InputMethodManager = getSystemService(
+                                    INPUT_METHOD_SERVICE
+                                ) as InputMethodManager
+                                imm.hideSoftInputFromWindow(binding.gluNew.getWindowToken(), 0)
+                                simpleAlert("Mensaje","Registrado con exito")
+                              //  Toast.makeText(applicationContext ,"Registrado con existo" , Toast.LENGTH_SHORT).show()
                                 consultData()
                                 binding.gluNew.text.clear()
                             }else{

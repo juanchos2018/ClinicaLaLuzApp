@@ -1,22 +1,29 @@
 package com.clinicalaluz.clinicaapp
 
 import android.R
+import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.ui.AppBarConfiguration
 import com.clinicalaluz.clinicaapp.databinding.ActivityPrincipalBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 
 class PrincipalActivity : AppCompatActivity() {
 
     private lateinit var  binding : ActivityPrincipalBinding
-
+    private  lateinit var alert : AlertDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // setContentView(R.layout.activity_principal)
@@ -75,11 +82,31 @@ class PrincipalActivity : AppCompatActivity() {
 
     }
     private fun salir() {
-        val preferences = getSharedPreferences("datosuser", MODE_PRIVATE)
-        preferences.edit().remove("NUM_DOC_IDENTIDAD").commit()
-        val intent = Intent(this, InicioSesionActivity::class.java)
-        startActivity(intent)
-        finish()
+
+        val dialogBuilder = AlertDialog.Builder(this)
+        val btnno: Button
+        val btnsi: Button
+        val v = LayoutInflater.from(applicationContext)
+            .inflate(com.clinicalaluz.clinicaapp.R.layout.dialogo_salir, null)
+
+        dialogBuilder.setView(v)
+        btnno = v.findViewById(com.clinicalaluz.clinicaapp.R.id.btnno) as Button
+        btnsi = v.findViewById(com.clinicalaluz.clinicaapp.R.id.btncerrarsesion) as Button
+
+        alert= dialogBuilder.create()
+        btnno.setOnClickListener {
+            alert.dismiss()
+        }
+        btnsi.setOnClickListener {
+            alert.dismiss()
+            val preferences = getSharedPreferences("datosuser", MODE_PRIVATE)
+            preferences.edit().remove("NUM_DOC_IDENTIDAD").commit()
+            val intent = Intent(this, InicioSesionActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        alert.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert.show()
     }
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

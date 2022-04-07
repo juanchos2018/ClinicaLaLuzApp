@@ -11,20 +11,19 @@
     android:paddingBottom="10dp"
     >
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardcitas"
         android:layout_width="match_parent"
         app:cardCornerRadius="8dp"
         app:cardBackgroundColor="@color/red"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/cardlayout"
             android:weightSum="5"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
 
             <LinearLayout
                 android:id="@+id/cli1"
@@ -78,15 +77,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                 </TextView>
-<!--                <TextView-->
-<!--                    android:id="@+id/tvconsultorio"-->
-<!--                    android:text="cobnsultrio  "-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:drawableLeft="@drawable/ic_chevron_left_black_white"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:drawablePadding="3dp"-->
-<!--                    android:layout_height="wrap_content">-->
-<!--                </TextView>-->
+                <TextView
+                    android:id="@+id/tvestado"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/ic_chevron_left_black_white"
+                    android:layout_width="wrap_content"
+                    android:drawablePadding="3dp"
+                    android:layout_height="wrap_content">
+                </TextView>
             </LinearLayout>
             <LinearLayout
 
@@ -122,12 +121,6 @@
                     android:layout_height="wrap_content">
                 </TextView>
             </LinearLayout>
-
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
-
-
-
-
 </LinearLayout>

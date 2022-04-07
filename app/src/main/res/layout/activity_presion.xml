@@ -247,7 +247,7 @@
 
             <Button
                 android:id="@+id/savePresion"
-                android:text="Cerrar"
+                android:text="guardar"
                 android:layout_below="@+id/layoutDiastólica"
                 android:textColor="@color/white"
                 android:background="@drawable/bk_boton_plano"

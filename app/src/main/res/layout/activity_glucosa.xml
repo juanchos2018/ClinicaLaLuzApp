@@ -160,7 +160,7 @@
 
             <Button
                 android:id="@+id/saveGlucosa"
-                android:text="Cerrar"
+                android:text="guardar"
                 android:layout_below="@+id/gluNew"
                 android:textColor="@color/white"
                 android:background="@drawable/bk_boton_plano"

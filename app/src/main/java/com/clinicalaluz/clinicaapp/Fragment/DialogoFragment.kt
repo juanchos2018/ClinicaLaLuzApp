@@ -37,6 +37,11 @@ class DialogoFragment : BottomSheetDialogFragment() {
     var  imptotal=""
     var  cod_bd=""
     var  cod_expediente=""
+    var  situacion=""
+    var  num_serie=""
+    var  num_documento=""
+
+
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -51,9 +56,11 @@ class DialogoFragment : BottomSheetDialogFragment() {
     override fun setupDialog(dialog: Dialog, style: Int) {
         val contentView = View.inflate(context, R.layout.fragment_dialogo, null)
         var tvnamedoctor :TextView =contentView.findViewById(R.id.tvnomvredoctor4)
+        var tvfechacita :TextView=contentView.findViewById(R.id.tvfechacita4)
         var tvespecialidad:TextView=contentView.findViewById(R.id.tvespecialidad4)
         var btnReprogramar:Button =contentView.findViewById(R.id.btnreprogramar)
         var btnPagar :Button=contentView.findViewById(R.id.btnPagar)
+        var btndescargar:Button=contentView.findViewById(R.id.btndescargar)
 
         btnReprogramar.setOnClickListener {
             reproFunc()
@@ -61,8 +68,12 @@ class DialogoFragment : BottomSheetDialogFragment() {
         btnPagar.setOnClickListener {
             pagarFunc()
         }
+        btndescargar.setOnClickListener {
+            downladDocument()
+        }
         tvnamedoctor.text=nombnredoctor
         tvespecialidad.text=nombreespecialidad
+        tvfechacita.text=fechaAtencion
 
         dialog.setContentView(contentView)
         (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))
@@ -74,17 +85,37 @@ class DialogoFragment : BottomSheetDialogFragment() {
            var mensaje="Necesitas Pagar la Cita"
            interfaceCita?.onCallbackTres(mensaje)
        }else{
-           var dia=""
-           var mes=""
-           var anio=""
-           var array =fechaAtencion.split("-")
-           dia=array[2]
-           mes=array[1]
-           anio=array[0]
-           var fechacur =String.format(dia+"-"+mes+"-"+anio)
-           var horario  = ClsMisCitas(codAtencion,cod_medico,cod_expediente,nombnredoctor,codEspecialidad,codSucursal,idHora,desHora,desEspecialidad,"",fechacur,nomSucursal,bd,"",codDocumento,imptotal,cod_bd)
-           interfaceCita?.onCallback(horario)
+
+           if (situacion=="ATE"){
+               var mensaje="YA FUE ATENDIDO"
+               interfaceCita?.onCallbackTres(mensaje)
+           }else{
+               var dia=""
+               var mes=""
+               var anio=""
+               var array =fechaAtencion.split("-")
+               dia=array[2]
+               mes=array[1]
+               anio=array[0]
+               var fechacur =String.format(dia+"-"+mes+"-"+anio)
+               var horario  = ClsMisCitas(codAtencion,cod_medico,cod_expediente,nombnredoctor,codEspecialidad,codSucursal,idHora,desHora,desEspecialidad,"",fechacur,nomSucursal,bd,"",codDocumento,imptotal,cod_bd,situacion,num_serie,num_documento)
+               interfaceCita?.onCallback(horario)
+           }
        }
+    }
+
+    private  fun downladDocument(){
+        var dia=""
+        var mes=""
+        var anio=""
+        var array =fechaAtencion.split("-")
+        dia=array[2]
+        mes=array[1]
+        anio=array[0]
+        var fechacur =String.format(dia+"-"+mes+"-"+anio)
+        var horario  =  ClsMisCitas(codAtencion,cod_medico,cod_expediente,nombnredoctor,codEspecialidad,codSucursal,idHora,desHora,desEspecialidad,"",fechacur,nomSucursal,bd,precio_v,codDocumento,imptotal,cod_bd,situacion,num_serie,num_documento)
+
+        interfaceCita?.onCallDonwland(horario)
     }
 
     private fun pagarFunc() {
@@ -97,9 +128,10 @@ class DialogoFragment : BottomSheetDialogFragment() {
             mes=array[1]
             anio=array[0]
             var fechacur =String.format(dia+"-"+mes+"-"+anio)
-            var horario  =  ClsMisCitas(codAtencion,cod_medico,cod_expediente,nombnredoctor,codEspecialidad,codSucursal,idHora,desHora,desEspecialidad,"",fechacur,nomSucursal,bd,precio_v,codDocumento,imptotal,cod_bd)
+            var horario  =  ClsMisCitas(codAtencion,cod_medico,cod_expediente,nombnredoctor,codEspecialidad,codSucursal,idHora,desHora,desEspecialidad,"",fechacur,nomSucursal,bd,precio_v,codDocumento,imptotal,cod_bd,situacion,num_serie,num_documento)
             interfaceCita?.onCallbackDos(horario)
         }else{
+
             var mensaje="Este cita ya esta pagada"
             interfaceCita?.onCallbackTres(mensaje)
         }

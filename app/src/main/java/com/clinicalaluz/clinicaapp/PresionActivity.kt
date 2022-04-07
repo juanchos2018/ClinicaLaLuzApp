@@ -22,6 +22,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -360,6 +361,10 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                                 binding.newSistolica.text.clear()
                                 binding.newDiastolica.text.clear()
                                 simpleAlert("Mensaje","Registrado con exito")
+                                val imm: InputMethodManager = getSystemService(
+                                    INPUT_METHOD_SERVICE
+                                ) as InputMethodManager
+                                imm.hideSoftInputFromWindow(binding.newPulso.windowToken, 0)
                             }else{
                                 Toast.makeText(applicationContext, "No Registrado", Toast.LENGTH_LONG).show()
                             }
@@ -564,6 +569,7 @@ class PresionActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         template.addParagraph(DES_AUXILIAR)
         template.createTable(header,listaTest)
         template.closeDocument()
+        template.viewPdf()
         simpleAlert("Mensaje","Reporte Creado")
     }
     private fun getDateTimeCalendar(){

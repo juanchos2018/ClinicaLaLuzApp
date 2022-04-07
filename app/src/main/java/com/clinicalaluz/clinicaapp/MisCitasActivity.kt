@@ -2,17 +2,18 @@ package com.clinicalaluz.clinicaapp
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.Response
@@ -22,9 +23,7 @@ import com.android.volley.toolbox.Volley
 import com.clinicalaluz.clinicaapp.Adapters.AdapterMisCitas
 import com.clinicalaluz.clinicaapp.Fragment.DialogoFragment.Companion.newInstance
 import com.clinicalaluz.clinicaapp.Interface.InterfaceCita
-import com.clinicalaluz.clinicaapp.Interface.InterfaceHorario
 import com.clinicalaluz.clinicaapp.clases.ClsMisCitas
-import com.clinicalaluz.clinicaapp.clases.Horario
 import com.clinicalaluz.clinicaapp.databinding.ActivityMisCitasBinding
 import com.tapadoo.alerter.Alerter
 import java.util.*
@@ -105,8 +104,11 @@ class MisCitasActivity : AppCompatActivity() {
                     val TIP_ESTADO =response.getJSONObject(x).getString("TIP_ESTADO")
                     val IMP_TOTAL =response.getJSONObject(x).getString("IMP_TOTAL")
                     val COD_BD =response.getJSONObject(x).getString("COD_BD")
+                    val SITUACION =response.getJSONObject(x).getString("SITUACION")
+                    val NUM_SERIE =response.getJSONObject(x).getString("NUM_SERIE")
+                    val NUM_DOCUMENTO =response.getJSONObject(x).getString("NUM_DOCUMENTO")
 
-                    listaMisCitas.add(ClsMisCitas(COD_ATENCION,COD_MEDICO,COD_EXPEDIENTE,DES_AUXILIAR,COD_ESPECIALIDAD,COD_SUCURSAL,IDE_HORA,DES_HORA,DES_ESPECIALIDAD,FEC_INSERCION,FEC_ATENCION,NOM_SUCURSAL,BD,PRECIO_V,COD_DOCUMENTO,IMP_TOTAL,COD_BD))
+                    listaMisCitas.add(ClsMisCitas(COD_ATENCION,COD_MEDICO,COD_EXPEDIENTE,DES_AUXILIAR,COD_ESPECIALIDAD,COD_SUCURSAL,IDE_HORA,DES_HORA,DES_ESPECIALIDAD,FEC_INSERCION,FEC_ATENCION,NOM_SUCURSAL,BD,PRECIO_V,COD_DOCUMENTO,IMP_TOTAL,COD_BD,SITUACION,NUM_SERIE,NUM_DOCUMENTO))
                 }
                 adapter = AdapterMisCitas(this,listaMisCitas)
                 adapter.DES_AUXILIAR=DES_AUXILIAR_MI
@@ -121,6 +123,10 @@ class MisCitasActivity : AppCompatActivity() {
                     }
                     override fun onCallbackTres(value: String) {
                         mesagePagado(value)
+                    }
+
+                    override fun onCallDonwland(value: ClsMisCitas?) {
+                        descargarDocumento(value)
                     }
                 }
                 adapter.setOnClickListener { v: View? ->
@@ -143,6 +149,11 @@ class MisCitasActivity : AppCompatActivity() {
                     bottomSheetDialog?.imptotal=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).IMP_TOTAL
                     bottomSheetDialog?.cod_bd=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).COD_BD
                     bottomSheetDialog?.cod_expediente=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).COD_EXPEDIENTE
+                    bottomSheetDialog?.situacion=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).SITUACION
+
+                    bottomSheetDialog?.num_serie=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).NUM_SERIE
+                    bottomSheetDialog?.num_documento=listaMisCitas.get(binding.recyclermicictas.getChildAdapterPosition(v!!)).NUM_DOCUMENTO
+
                     bottomSheetDialog?.show(supportFragmentManager,"bottonshelld")
 
                 }
@@ -190,6 +201,7 @@ class MisCitasActivity : AppCompatActivity() {
 //        COD_ATENCION=intent.getSerializableExtra("COD_ATENCION").toString()
 
         startActivity(intent)
+        bottomSheetDialog?.dismiss()
     }
 
     fun reprogramarCita(value: ClsMisCitas?){
@@ -208,7 +220,22 @@ class MisCitasActivity : AppCompatActivity() {
         //Toast.makeText(applicationContext, value!!.DES_ESPECIALIDAD, Toast.LENGTH_LONG).show()
 
          startActivity(intent)
+         bottomSheetDialog?.dismiss()
     }
+
+    fun descargarDocumento(value: ClsMisCitas?){
+        var peticion = "/pdf/documentos/ver_comprobante.php?su=${value?.COD_BD}&tc=${value?.COD_DOCUMENTO}&se=${value?.NUM_SERIE}&nu=${value?.NUM_DOCUMENTO}&op=0"
+        var manager: DownloadManager
+        manager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val uri: Uri =
+            Uri.parse(getString(R.string.URL_BASE)+peticion)
+        val request = DownloadManager.Request(uri)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        val reference = manager.enqueue(request)
+        Toast.makeText(applicationContext, value!!.DES_ESPECIALIDAD, Toast.LENGTH_LONG).show()
+
+    }
+
     fun diaglogoReprogramar(fechacurrent:String){
         val dialogBuilder = AlertDialog.Builder(this)
         val btncerrar: Button
